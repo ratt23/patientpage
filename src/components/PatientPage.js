@@ -1,15 +1,13 @@
 // patient-app/src/components/PatientPage.js
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; // <-- useParams sudah di-import
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import SignatureCanvas from 'react-signature-canvas';
 import './PatientPage.css';
 
 const PatientPage = () => {
-  // --- PERUBAHAN: Ambil 'token', bukan 'NomorMR' ---
   const { token } = useParams();
   const navigate = useNavigate();
-  
   const [patient, setPatient] = useState(null);
   const [signaturePad, setSignaturePad] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -26,7 +24,6 @@ const PatientPage = () => {
     'pencegahan-infeksi', 'pengelolaan-nyeri', 'persetujuan'
   ];
 
-  // Efek untuk Canvas (tidak berubah)
   useLayoutEffect(() => {
     const updateCanvasWidth = () => {
       if (signatureContainerRef.current) {
@@ -38,11 +35,9 @@ const PatientPage = () => {
     return () => window.removeEventListener('resize', updateCanvasWidth);
   }, [signatureContainerRef]);
 
-  // Efek untuk mengambil data pasien
   useEffect(() => {
     const fetchPatientData = async () => {
       try {
-        // --- PERUBAHAN: Gunakan 'token' di URL query ---
         const response = await axios.get(`/.netlify/functions/get-patient-details?token=${token}`);
         if (response.data.StatusPersetujuan === 'Disetujui') {
           alert('E-booklet ini sudah disetujui sebelumnya.');
@@ -55,7 +50,6 @@ const PatientPage = () => {
       }
     };
     fetchPatientData();
-  // --- PERUBAHAN: Gunakan 'token' di dependency array ---
   }, [token, navigate]);
 
   const handleCheckboxChange = (e) => {
@@ -78,9 +72,6 @@ const PatientPage = () => {
     setIsSubmitting(true);
     try {
       const signatureData = signaturePad.toDataURL();
-      // PENTING: Kita tetap mengirim 'patient.NomorMR' ke backend
-      // Ini aman karena 'patient' adalah data yang kita fetch
-      // menggunakan token yang aman.
       await axios.post('/.netlify/functions/submit-approval', {
         NomorMR: patient.NomorMR, 
         signature_data: signatureData
@@ -104,7 +95,6 @@ const PatientPage = () => {
 
   return (
     <div className="patient-page">
-      {/* Header */}
       <header className="ebooklet-header">
         <div className="logo-placeholder"><img src="https://via.placeholder.com/200x60?text=LOGO+ANDA" alt="Logo Rumah Sakit" /></div>
         <div className="header-text">
@@ -117,7 +107,6 @@ const PatientPage = () => {
         </div>
       </header>
 
-      {/* Navigasi */}
       <nav className="section-nav">
         <div className="progress-bar"><div className="progress-fill" style={{ width: `${((currentSection + 1) / sections.length) * 100}%` }}></div></div>
         <div className="section-steps">
@@ -130,7 +119,6 @@ const PatientPage = () => {
         </div>
       </nav>
 
-      {/* Wrapper Konten */}
       <div className="content-wrapper">
         
         {/* Section 1: Informasi Pasien & Jadwal */}
@@ -147,7 +135,14 @@ const PatientPage = () => {
             </div>
             <div className="prep-category">
               <h3>📄 Dokumen yang Perlu Dibawa:</h3>
-              <ul><li>Surat pengantar operasi</li><li>Laporan medis awal</li><li>Fotokopi KTP</li><li>Fotokopi kartu asuransi</li><li>Hasil laboratorium dan radiologi</li></ul>
+              <ul>
+                <li>Surat pengantar operasi dari dokter</li>
+                <li>Laporan medis awal dan riwayat penyakit</li>
+                <li>Fotokopi KTP (pasien dan penanggung jawab)</li>
+                <li>Fotokopi kartu asuransi/BPJS</li>
+                <li>Hasil laboratorium dan radiologi terbaru</li>
+                <li>Surat persetujuan operasi yang sudah ditandatangani</li>
+              </ul>
             </div>
             <div className="section-navigation"><button onClick={nextSection} className="btn-next">Lanjut ke Persiapan Mental →</button></div>
           </section>
@@ -157,10 +152,41 @@ const PatientPage = () => {
         {currentSection === 1 && (
           <section id="persiapan-mental" className="content-section">
             <h2>🧠 PERSIAPAN MENTAL & PSIKOLOGIS</h2>
-            <div className="prep-category"><h3>Rasa Takut dan Cemas...</h3>{/* ... */}</div>
-            <div className="prep-category"><h3>Konseling dan Dukungan...</h3>{/* ... */}</div>
-            <div className="important-note"><h4>💡 Tips Mengatasi Kecemasan...</h4>{/* ... */}</div>
-            <div className="section-navigation"><button onClick={prevSection} className="btn-prev">← Kembali ke Informasi</button><button onClick={nextSection} className="btn-next">Lanjut ke Persiapan Fisik →</button></div>
+            <div className="prep-category">
+              <h3>Rasa Takut dan Cemas Sebelum Operasi</h3>
+              <p>Munculnya perasaan takut dan cemas sebelum operasi adalah hal wajar. Beberapa hal yang sering menjadi kekhawatiran pasien:</p>
+              <ul>
+                <li>Takut nyeri setelah operasi</li>
+                <li>Takut terjadi perubahan fisik (body image)</li>
+                <li>Khawatir tentang kesembuhan dan hasil operasi</li>
+                <li>Khawatir tentang biaya operasi dan perawatan</li>
+                <li>Takut terhadap hal-hal yang tidak diketahui (unknown)</li>
+              </ul>
+              <p>Perasaan ini normal dan dapat dikelola dengan baik. Komunikasi yang terbuka dengan tim medis akan sangat membantu.</p>
+            </div>
+            <div className="prep-category">
+              <h3>Konseling dan Dukungan</h3>
+              <p>Sangat penting bagi Anda yang hendak menjalani proses operasi untuk mendapatkan dukungan dari:</p>
+              <ul>
+                <li><strong>Keluarga dan teman:</strong> Mereka dapat memberikan dukungan moral dan membantu dalam persiapan serta pemulihan.</li>
+                <li><strong>Tim medis (dokter, perawat, psikolog):</strong> Jangan ragu untuk bertanya dan menyampaikan kekhawatiran Anda. Tim medis siap membantu dan memberikan informasi yang dibutuhkan.</li>
+                <li><strong>Konseling spiritual:</strong> Jika diperlukan, Anda dapat meminta dukungan dari konselor spiritual atau pemuka agama.</li>
+              </ul>
+            </div>
+            <div className="important-note">
+              <h4>💡 Tips Mengatasi Kecemasan:</h4>
+              <ul>
+                <li>Diskusikan kekhawatiran dengan dokter dan keluarga</li>
+                <li>Lakukan teknik relaksasi seperti napas dalam dan meditasi</li>
+                <li>Jaga komunikasi dengan tim medis untuk informasi yang jelas</li>
+                <li>Persiapkan diri secara fisik dan mental dengan baik</li>
+                <li>Jangan ragu meminta dukungan dari orang terdekat</li>
+              </ul>
+            </div>
+            <div className="section-navigation">
+              <button onClick={prevSection} className="btn-prev">← Kembali ke Informasi</button>
+              <button onClick={nextSection} className="btn-next">Lanjut ke Persiapan Fisik →</button>
+            </div>
           </section>
         )}
 
@@ -168,10 +194,42 @@ const PatientPage = () => {
         {currentSection === 2 && (
           <section id="persiapan-fisik" className="content-section">
             <h2>💪 PERSIAPAN FISIK</h2>
-            <div className="prep-category"><h3>Persiapan Fisik...</h3>{/* ... */}</div>
-            <div className="prep-category"><h3>Petunjuk Umum...</h3>{/* ... */}</div>
-            <div className="reminder"><h4>📝 Yang Perlu Diinformasikan...</h4>{/* ... */}</div>
-            <div className="section-navigation"><button onClick={prevSection} className="btn-prev">← Kembali ke Persiapan Mental</button><button onClick={nextSection} className="btn-next">Lanjut ke Pencegahan Infeksi →</button></div>
+            <div className="prep-category">
+              <h3>Persiapan Fisik Sebelum Operasi</h3>
+              <ul>
+                <li>Kondisi fisik dalam keadaan sehat dan optimal</li>
+                <li>Istirahat yang cukup minimal 8 jam sebelum operasi</li>
+                <li>Berhenti merokok minimal 24 jam sebelum operasi</li>
+                <li>Hindari konsumsi alkohol 48 jam sebelum operasi</li>
+                <li>Puasa sesuai petunjuk dokter (biasanya 6-8 jam sebelum operasi)</li>
+                <li>Mandi dengan sabun antiseptik yang disediakan rumah sakit</li>
+              </ul>
+            </div>
+            <div className="prep-category">
+              <h3>Petunjuk Umum Sebelum Operasi</h3>
+              <ul>
+                <li>Datanglah sesuai dengan jadwal yang ditentukan</li>
+                <li>Pakailah pakaian yang nyaman dan mudah dibuka</li>
+                <li>Lepaskan semua perhiasan, jam tangan, dan aksesoris</li>
+                <li>Kosongkan kandung kemih sebelum ke ruang operasi</li>
+                <li>Bawa surat-surat penting dalam satu map</li>
+                <li>Pastikan ada pendamping selama proses operasi</li>
+              </ul>
+            </div>
+            <div className="reminder">
+              <h4>📝 Yang Perlu Diinformasikan ke Petugas Medis:</h4>
+              <ul>
+                <li>Riwayat penyakit yang diderita (hipertensi, diabetes, asma, dll)</li>
+                <li>Alergi obat atau makanan tertentu</li>
+                <li>Obat-obatan yang sedang dikonsumsi secara rutin</li>
+                <li>Riwayat operasi sebelumnya</li>
+                <li>Penyakit menular yang pernah diderita</li>
+              </ul>
+            </div>
+            <div className="section-navigation">
+              <button onClick={prevSection} className="btn-prev">← Kembali ke Persiapan Mental</button>
+              <button onClick={nextSection} className="btn-next">Lanjut ke Pencegahan Infeksi →</button>
+            </div>
           </section>
         )}
 
@@ -179,10 +237,48 @@ const PatientPage = () => {
         {currentSection === 3 && (
           <section id="pencegahan-infeksi" className="content-section">
             <h2>🦠 PENCEGAHAN INFEKSI DAERAH OPERASI</h2>
-            <div className="risk-category"><h3>Apa Itu Infeksi...</h3>{/* ... */}</div>
-            <div className="prep-category"><h3>Pencegahan Sebelum Operasi...</h3>{/* ... */}</div>
-            <div className="phase"><h3>Perawatan Luka...</h3>{/* ... */}</div>
-            <div className="section-navigation"><button onClick={prevSection} className="btn-prev">← Kembali ke Persiapan Fisik</button><button onClick={nextSection} className="btn-next">Lanjut ke Pengelolaan Nyeri →</button></div>
+            <div className="risk-category">
+              <h3>Apa Itu Infeksi Daerah Operasi?</h3>
+              <p>Infeksi daerah operasi adalah infeksi yang terjadi pada luka operasi dalam 30 hari setelah operasi. Infeksi dapat terjadi di:</p>
+              <ul>
+                <li>Luka insisi superfisial (kulit dan jaringan subkutan)</li>
+                <li>Luka insisi dalam (otot dan fasia)</li>
+                <li>Organ atau rongga tubuh yang dioperasi</li>
+              </ul>
+              <p><strong>Tanda-tanda infeksi:</strong></p>
+              <ul>
+                <li>Kemerahan dan rasa nyeri di sekitar luka</li>
+                <li>Pembengkakan dan terasa hangat</li>
+                <li>Keluar nanah atau cairan dari luka</li>
+                <li>Demam lebih dari 38°C</li>
+                <li>Bau tidak sedap dari luka</li>
+              </ul>
+            </div>
+            <div className="prep-category">
+              <h3>Pencegahan Sebelum Operasi</h3>
+              <ul>
+                <li>Menjaga kebersihan diri dengan mandi teratur</li>
+                <li>Menggunakan sabun antiseptik yang diberikan</li>
+                <li>Membersihkan area yang akan dioperasi sesuai petunjuk</li>
+                <li>Memastikan tidak ada infeksi aktif di tubuh</li>
+                <li>Mengikuti protokol puasa dan persiapan usus jika diperlukan</li>
+              </ul>
+            </div>
+            <div className="phase">
+              <h3>Perawatan Luka Setelah Pulang</h3>
+              <ul>
+                <li>3-5 hari setelah operasi: jaga luka tetap kering dan bersih</li>
+                <li>Ganti balut luka sesuai jadwal yang ditentukan</li>
+                <li>Cuci tangan sebelum menyentuh luka</li>
+                <li>Hindari menggaruk atau memegang luka</li>
+                <li>Segera hubungi dokter jika ada tanda infeksi</li>
+                <li>Kontrol ulang sesuai jadwal untuk evaluasi luka</li>
+              </ul>
+            </div>
+            <div className="section-navigation">
+              <button onClick={prevSection} className="btn-prev">← Kembali ke Persiapan Fisik</button>
+              <button onClick={nextSection} className="btn-next">Lanjut ke Pengelolaan Nyeri →</button>
+            </div>
           </section>
         )}
 
@@ -190,11 +286,56 @@ const PatientPage = () => {
         {currentSection === 4 && (
           <section id="pengelolaan-nyeri" className="content-section">
             <h2>😣 PENGELOLAAN NYERI</h2>
-            <div className="prep-category"><h3>Mengenal Nyeri...</h3>{/* ... */}</div>
-            <div className="risk-category"><h3>Pengobatan Nyeri Tanpa Obat...</h3>{/* ... */}</div>
-            <div className="phase"><h3>Pengobatan Nyeri dengan Obat...</h3>{/* ... */}</div>
-            <div className="important-note"><h4>📊 Alat Pengukur Skor Nyeri...</h4>{/* ... */}</div>
-            <div className="section-navigation"><button onClick={prevSection} className="btn-prev">← Kembali ke Pencegahan Infeksi</button><button onClick={nextSection} className="btn-next">Lanjut ke Persetujuan Tindakan →</button></div>
+            <div className="prep-category">
+              <h3>Mengenal Nyeri</h3>
+              <p>Nyeri adalah suatu pengalaman sensori dan emosional yang tidak menyenangkan akibat kerusakan jaringan yang actual atau potensial. Nyeri pasca operasi adalah hal normal, namun dapat dikelola dengan baik.</p>
+              <p><strong>Jenis nyeri pasca operasi:</strong></p>
+              <ul>
+                <li>Nyeri akut: terjadi segera setelah operasi dan bersifat sementara</li>
+                <li>Nyeri kronik: nyeri yang berlangsung lebih dari 3 bulan</li>
+                <li>Nyeri somatic: berasal dari kulit, otot, dan tulang</li>
+                <li>Nyeri visceral: berasal dari organ dalam</li>
+              </ul>
+            </div>
+            <div className="risk-category">
+              <h3>Pengobatan Nyeri Tanpa Obat</h3>
+              <ul>
+                <li>Teknik relaksasi dan pernapasan dalam</li>
+                <li>Distraksi dengan mendengarkan musik atau menonton TV</li>
+                <li>Kompres hangat atau dingin pada area nyeri</li>
+                <li>Posisi tubuh yang nyaman dan perubahan posisi berkala</li>
+                <li>Pijatan lembut di area sekitar luka (jika diizinkan dokter)</li>
+                <li>Meditasi dan teknik mindfullness</li>
+              </ul>
+            </div>
+            <div className="phase">
+              <h3>Pengobatan Nyeri dengan Obat</h3>
+              <p>Bentuk pemberian obat anti nyeri:</p>
+              <ul>
+                <li>Tablet atau kapsul (oral)</li>
+                <li>Suntikan (intramuskular atau intravena)</li>
+                <li>Patch atau plester kulit</li>
+                <li>PCA (Patient Controlled Analgesia)</li>
+                <li>Epidural atau spinal analgesia</li>
+              </ul>
+              <p><strong>Obat anti nyeri sebaiknya diminum secara teratur sesuai jadwal, bukan menunggu nyeri menjadi berat.</strong></p>
+            </div>
+            <div className="important-note">
+              <h4>📊 Alat Pengukur Skor Nyeri</h4>
+              <p>Anda akan diberikan pertanyaan oleh perawat untuk menilai tingkat nyeri menggunakan skala 0-10:</p>
+              <div className="pain-scale">
+                <div className="pain-level">0: Tidak Nyeri</div>
+                <div className="pain-level">1-3: Nyeri Ringan (mengganggu tapi bisa diabaikan)</div>
+                <div className="pain-level">4-6: Nyeri Mengganggu (mengganggu aktivitas)</div>
+                <div className="pain-level">7-9: Nyeri Hebat (sangat mengganggu, sulit beraktivitas)</div>
+                <div className="pain-level">10: Nyeri Sangat Hebat (terburuk yang pernah dirasakan)</div>
+              </div>
+              <p>Beritahu perawat jika skor nyeri Anda ≥4 untuk mendapatkan penanganan yang tepat.</p>
+            </div>
+            <div className="section-navigation">
+              <button onClick={prevSection} className="btn-prev">← Kembali ke Pencegahan Infeksi</button>
+              <button onClick={nextSection} className="btn-next">Lanjut ke Persetujuan Tindakan →</button>
+            </div>
           </section>
         )}
 
@@ -204,10 +345,12 @@ const PatientPage = () => {
             <h2>📝 FORMULIR PERSETUJUAN TINDAKAN</h2>
             <div className="consent-declaration">
               <div className="declaration-text">
-                <p><strong>Surat Persetujuan Tindakan...</strong>{/* ... */}</p>
-                <p>Saya yang bertanda tangan di bawah ini, <strong>{patient.NamaPasien}</strong> (Nomor MR: <strong>{patient.NomorMR}</strong>), ... menyatakan:</p>
+                <p><strong>Surat Persetujuan Tindakan (Informed Consent)</strong><br/>
+                Dokter akan memberikan penjelasan tentang risiko, keuntungan, dan alternatif pengobatan kepada pasien dan keluarga. 
+                Pasien dan keluarga dalam kondisi sadar, bebas mengambil keputusan untuk memberikan persetujuan agar tindakan operasi dapat dijalankan.</p>
                 
-                {/* Checkbox Persetujuan */}
+                <p>Saya yang bertanda tangan di bawah ini, <strong>{patient.NamaPasien}</strong> (Nomor MR: <strong>{patient.NomorMR}</strong>), setelah membaca dan memahami seluruh informasi dalam booklet ini, dengan ini menyatakan:</p>
+                
                 <div className="consent-points">
                   <label className="consent-item-checkbox">
                     <input type="checkbox" name="check1" checked={consentChecks.check1} onChange={handleCheckboxChange} />
@@ -242,7 +385,6 @@ const PatientPage = () => {
                 </div>
               </div>
 
-              {/* Area Tanda Tangan */}
               <div className="signature-area">
                 <h3>Tanda Tangan Pasien/Penanggung Jawab</h3>
                 <div className="signature-pad-container" ref={signatureContainerRef}>
@@ -259,12 +401,11 @@ const PatientPage = () => {
                 </div>
               </div>
 
-              {/* Tombol Submit */}
               <div className="final-submission">
-                <p className="confirmation-text">Persiapan yang baik selama periode operasi...</p>
+                <p className="confirmation-text">Persiapan yang baik selama periode operasi akan membantu menurunkan komplikasi operasi dan mempercepat pemulihan setelah operasi. Dengan mengirim persetujuan ini, saya menyatakan telah memahami semua informasi yang diberikan.</p>
                 <button 
                   onClick={handleSubmit} 
-                  disabled={isSubmitting || !allChecked} // Tombol nonaktif jika belum allChecked
+                  disabled={isSubmitting || !allChecked}
                   className="btn-submit-consent"
                 >
                   {isSubmitting ? '🔄 Mengirim Persetujuan...' : '✅ SETUJU & KIRIM PERSETUJUAN'}
@@ -277,7 +418,6 @@ const PatientPage = () => {
         )}
       </div>
 
-      {/* Footer */}
       <footer className="ebooklet-footer">
         <p><strong>SILOAM HOSPITALS AMBON</strong></p>
         <p className="footer-contact">Ambulans 24 Jam: 1-500-911 | Informasi: 1-500-181</p>
