@@ -1,31 +1,53 @@
-// D:\patient-app\netlify\functions\get-patient-details.js
-
 const { Pool } = require('pg');
 
-// --- PERBAIKAN SSL ---
+// --- PERBAIKAN SSL DAN ERROR HANDLING ---
+let pool;
+let initializationError = null;
 
-// 1. Ambil URL database dari environment
-const dbUrl = process.env.DATABASE_URL;
+try {
+  // 1. Ambil URL database dari environment
+  const dbUrl = process.env.DATABASE_URL;
 
-// 2. Bersihkan query params (?sslmode=... dll.) dari URL
-//    Ini untuk menghindari konflik dengan pengaturan SSL di bawah
-const cleanDbUrl = dbUrl.split('?')[0]; 
+  // 2. Cek apakah DATABASE_URL ada
+  if (!dbUrl) {
+    initializationError = 'FATAL ERROR: DATABASE_URL environment variable is not set.';
+    console.error(initializationError);
+  } else {
+    // 3. Bersihkan query params (?sslmode=... dll.) dari URL
+    const cleanDbUrl = dbUrl.split('?')[0]; 
 
-// 3. Konfigurasi Pool secara eksplisit
-const poolConfig = {
-  connectionString: cleanDbUrl, // Gunakan URL yang sudah bersih
-  ssl: {
-    rejectUnauthorized: false // Tentukan SSL secara eksplisit di sini
+    // 4. Konfigurasi Pool secara eksplisit
+    const poolConfig = {
+      connectionString: cleanDbUrl, // Gunakan URL yang sudah bersih
+      ssl: {
+        rejectUnauthorized: false // Tentukan SSL secara eksplisit di sini
+      }
+    };
+    
+    // 5. Buat Pool dengan konfigurasi baru
+    pool = new Pool(poolConfig);
   }
-};
-
-// 4. Buat Pool dengan konfigurasi baru
-const pool = new Pool(poolConfig);
-
-// --- AKHIR PERBAIKAN SSL ---
+} catch (error) {
+  console.error("Error during pool initialization:", error);
+  initializationError = "Error during pool initialization: " + error.message;
+}
+// --- AKHIR PERBAIKAN ---
 
 exports.handler = async function (event, context) {
   console.log('=== get-patient-details called ===');
+
+  // Cek apakah ada error saat inisialisasi pool
+  if (initializationError || !pool) {
+    console.error("Returning 500 due to initialization error.");
+    return {
+      statusCode: 500,
+      headers: { 'Access-Control-Allow-Origin': '*' },
+      body: JSON.stringify({ 
+        error: 'Gagal menginisialisasi koneksi database',
+        details: initializationError || 'Pool is not available.'
+      }),
+    };
+  }
   
   const { NomorMR } = event.queryStringParameters;
 
@@ -45,9 +67,10 @@ exports.handler = async function (event, context) {
     client = await pool.connect();
     console.log('Database connected, querying patient details...');
     
+    // Query ini mengambil "Dokter" yang baru Anda tambahkan
     const result = await client.query(
-      `SELECT "NomorMR", "NamaPasien", "JadwalOperasi", "StatusPersetujuan", 
-              "TimestampPersetujuan", "LinkBuktiPDF", "TimestampDibuat"
+      `SELECT "NomorMR", "NamaPasien", "JadwalOperasi", "Dokter", 
+              "StatusPersetujuan", "TimestampPersetujuan", "LinkBuktiPDF", "TimestampDibuat"
        FROM patients 
        WHERE "NomorMR" = $1`,
       [NomorMR]
