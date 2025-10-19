@@ -1,83 +1,64 @@
+// patient-app/netlify/functions/get-patient-details.js
 const { Pool } = require('pg');
 
-// --- PERBAIKAN SSL DAN ERROR HANDLING ---
+// --- Koneksi Pool (Sudah Termasuk Error Handling) ---
 let pool;
 let initializationError = null;
-
 try {
-  // 1. Ambil URL database dari environment
   const dbUrl = process.env.DATABASE_URL;
-
-  // 2. Cek apakah DATABASE_URL ada
   if (!dbUrl) {
     initializationError = 'FATAL ERROR: DATABASE_URL environment variable is not set.';
     console.error(initializationError);
   } else {
-    // 3. Bersihkan query params (?sslmode=... dll.) dari URL
     const cleanDbUrl = dbUrl.split('?')[0]; 
-
-    // 4. Konfigurasi Pool secara eksplisit
     const poolConfig = {
-      connectionString: cleanDbUrl, // Gunakan URL yang sudah bersih
-      ssl: {
-        rejectUnauthorized: false // Tentukan SSL secara eksplisit di sini
-      }
+      connectionString: cleanDbUrl,
+      ssl: { rejectUnauthorized: false }
     };
-    
-    // 5. Buat Pool dengan konfigurasi baru
     pool = new Pool(poolConfig);
   }
 } catch (error) {
   console.error("Error during pool initialization:", error);
   initializationError = "Error during pool initialization: " + error.message;
 }
-// --- AKHIR PERBAIKAN ---
+// --- Akhir Koneksi Pool ---
 
 exports.handler = async function (event, context) {
   console.log('=== get-patient-details called ===');
-
-  // Cek apakah ada error saat inisialisasi pool
   if (initializationError || !pool) {
-    console.error("Returning 500 due to initialization error.");
-    return {
-      statusCode: 500,
-      headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ 
-        error: 'Gagal menginisialisasi koneksi database',
-        details: initializationError || 'Pool is not available.'
-      }),
-    };
+    return { statusCode: 500, headers: { 'Access-Control-Allow-Origin': '*' }, body: JSON.stringify({ error: 'Gagal menginisialisasi koneksi database', details: initializationError || 'Pool is not available.'}), };
   }
   
-  const { NomorMR } = event.queryStringParameters;
+  // --- PERUBAHAN: Cari 'token', bukan 'NomorMR' ---
+  const { token } = event.queryStringParameters;
 
-  if (!NomorMR) {
+  if (!token) {
     return {
       statusCode: 400,
       headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ error: 'NomorMR is required' }),
+      body: JSON.stringify({ error: 'Token is required' }),
     };
   }
 
-  console.log('Fetching details for NomorMR:', NomorMR);
+  console.log('Fetching details for Token:', token);
+  // --- AKHIR PERUBAHAN ---
 
   let client;
-
   try {
     client = await pool.connect();
     console.log('Database connected, querying patient details...');
     
-    // Query ini mengambil "Dokter" yang baru Anda tambahkan
+    // --- PERUBAHAN: SELECT ... WHERE "TokenAkses" = $1 ---
     const result = await client.query(
       `SELECT "NomorMR", "NamaPasien", "JadwalOperasi", "Dokter", 
-              "StatusPersetujuan", "TimestampPersetujuan", "LinkBuktiPDF", "TimestampDibuat"
+              "StatusPersetujuan", "TimestampPersetujuan"
        FROM patients 
-       WHERE "NomorMR" = $1`,
-      [NomorMR]
+       WHERE "TokenAkses" = $1`, // <-- INI ADALAH KUNCI KEAMANAN
+      [token] // <-- Gunakan token
     );
     
     if (result.rows.length === 0) {
-      console.log('Patient not found:', NomorMR);
+      console.log('Patient not found for token:', token);
       return {
         statusCode: 404,
         headers: { 'Access-Control-Allow-Origin': '*' },
@@ -85,13 +66,12 @@ exports.handler = async function (event, context) {
       };
     }
 
+    // Kita tetap mengirim NomorMR ke frontend, karena dibutuhkan
+    // untuk fungsi 'submit-approval'
     console.log('Patient found:', result.rows[0].NamaPasien);
     return {
       statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
       body: JSON.stringify(result.rows[0]),
     };
   } catch (error) {
@@ -99,15 +79,9 @@ exports.handler = async function (event, context) {
     return {
       statusCode: 500,
       headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ 
-        error: 'Gagal mengambil data pasien',
-        details: error.message 
-      }),
+      body: JSON.stringify({ error: 'Gagal mengambil data pasien', details: error.message }),
     };
   } finally {
-    if (client) {
-      client.release();
-      console.log('Client released');
-    }
+    if (client) { client.release(); console.log('Client released'); }
   }
 };
