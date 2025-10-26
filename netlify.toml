@@ -4,6 +4,10 @@
 
 [functions]
   directory = "netlify/functions"
+  # --- INI ADALAH PERBAIKANNYA ---
+  # Baris ini memberitahu Netlify untuk menyertakan
+  # semua file dari folder 'utils' saat mendeploy fungsi.
+  included_files = ["netlify/utils/**"]
 
 # Environment variables for build
 [build.environment]
