@@ -191,31 +191,31 @@ const PatientPage = () => {
             </div>
 
             <div className="prep-category">
-                <h3>Persiapan Operasi [cite: 1, 2]</h3>
-                <p>Aspek terpenting dari persiapan operasi adalah mengevaluasi indikasi dan manfaat tindakan operasi[cite: 3]. Hal ini dikarenakan, pemahaman pasien dan keluarga tentang persiapan operasi, seperti indikasi operasi, tindakan khusus, dan risiko operasi sangat diperlukan[cite: 4].</p>
-                <p>Ketika seorang dokter menyarankan Anda untuk menjalani operasi sebagai terapi, Anda dan keluarga diimbau untuk segera mendiskusikan persiapan operasi tersebut, serta hal-hal apa saja yang bisa mendukung kelancaran tindakan[cite: 5].</p>
+                <h3>Persiapan Operasi</h3>
+                <p>Aspek terpenting dari persiapan operasi adalah mengevaluasi indikasi dan manfaat tindakan operasi. Hal ini dikarenakan, pemahaman pasien dan keluarga tentang persiapan operasi, seperti indikasi operasi, tindakan khusus, dan risiko operasi sangat diperlukan.</p>
+                <p>Ketika seorang dokter menyarankan Anda untuk menjalani operasi sebagai terapi, Anda dan keluarga diimbau untuk segera mendiskusikan persiapan operasi tersebut, serta hal-hal apa saja yang bisa mendukung kelancaran tindakan.</p>
             </div>
             <div className="reminder">
-                <h4>Hal Penting untuk Diinformasikan ke Petugas Medis [cite: 6]</h4>
+                <h4>Hal Penting untuk Diinformasikan ke Petugas Medis</h4>
                  <p>Berikut adalah sejumlah hal penting yang perlu Anda dan keluarga informasikan kepada petugas medis, antara lain:</p>
                  <ul>
-                    <li>Riwayat penyakit[cite: 7].</li>
-                    <li>Kesediaan melakukan pemeriksaan sesuai rekomendasi dokter[cite: 8].</li>
-                    <li>Obat-obatan yang dikonsumsi[cite: 9].</li>
+                    <li>Riwayat penyakit.</li>
+                    <li>Kesediaan melakukan pemeriksaan sesuai rekomendasi dokter.</li>
+                    <li>Obat-obatan yang dikonsumsi.</li>
                     <li>Alergi obat atau makanan tertentu.</li>
                     <li>Riwayat operasi sebelumnya.</li>
                     <li>Penyakit menular yang pernah diderita.</li>
                 </ul>
             </div>
              <div className="prep-category">
-              <h3>📄 Dokumen yang Perlu Dibawa Pasien[cite: 237]:</h3>
+              <h3>📄 Dokumen yang Perlu Dibawa Pasien:</h3>
               <ul>
-                <li>Surat pengantar operasi / rawat inap[cite: 183, 238].</li>
-                <li>Laporan medis awal[cite: 184, 239].</li>
-                <li>Fotokopi KTP (pasien dan penanggung jawab)[cite: 185, 241].</li>
-                <li>Fotokopi kartu asuransi/BPJS[cite: 186, 242].</li>
-                <li>Data penunjang (hasil laboratorium dan radiologi) terbaru[cite: 187].</li>
-                <li>Surat persetujuan operasi yang sudah ditandatangani (jika ada sebelumnya)[cite: 240].</li>
+                <li>Surat pengantar operasi / rawat inap.</li>
+                <li>Laporan medis awal.</li>
+                <li>Fotokopi KTP (pasien dan penanggung jawab).</li>
+                <li>Fotokopi kartu asuransi/BPJS.</li>
+                <li>Data penunjang (hasil laboratorium dan radiologi) terbaru.</li>
+                <li>Surat persetujuan operasi yang sudah ditandatangani (jika ada sebelumnya).</li>
               </ul>
             </div>
 
@@ -230,20 +230,20 @@ const PatientPage = () => {
           <section id="persiapan-mental" className="content-section">
             <h2>🧠 PERSIAPAN MENTAL & PSIKOLOGIS</h2>
             <div className="risk-category">
-                <h3>Rasa Takut dan Cemas Sebelum Operasi [cite: 10]</h3>
-                <p>Munculnya perasaan takut dan cemas sebelum operasi adalah hal wajar[cite: 11]. Biasanya perasaan ini dipicu oleh sejumlah ketakutan, sebagai berikut:</p>
+                <h3>Rasa Takut dan Cemas Sebelum Operasi</h3>
+                <p>Munculnya perasaan takut dan cemas sebelum operasi adalah hal wajar. Biasanya perasaan ini dipicu oleh sejumlah ketakutan, sebagai berikut:</p>
                 <ul>
-                    <li>Takut nyeri setelah operasi[cite: 12].</li>
-                    <li>Takut terjadi perubahan fisik (body image)[cite: 13].</li>
-                    <li>Takut hasil operasi keganasan[cite: 14].</li>
-                    <li>Takut menghadapi ruang operasi, peralatan, dan petugas kamar operasi[cite: 15].</li>
-                    <li>Takut tidak dapat sadarkan diri setelah dibius[cite: 17].</li>
-                    <li>Takut operasi gagal[cite: 18].</li>
+                    <li>Takut nyeri setelah operasi.</li>
+                    <li>Takut terjadi perubahan fisik (body image).</li>
+                    <li>Takut hasil operasi keganasan.</li>
+                    <li>Takut menghadapi ruang operasi, peralatan, dan petugas kamar operasi.</li>
+                    <li>Takut tidak dapat sadarkan diri setelah dibius.</li>
+                    <li>Takut operasi gagal.</li>
                 </ul>
             </div>
             <div className="prep-category">
                 <h3>Konseling dan Dukungan</h3>
-                <p>Oleh karena itu, sangat penting bagi Anda yang hendak menjalani proses operasi untuk mendapatkan konseling dan tes sukarela dari petugas terlatih setelah mendapatkan hasil pemeriksaan[cite: 19].</p>
+                <p>Oleh karena itu, sangat penting bagi Anda yang hendak menjalani proses operasi untuk mendapatkan konseling dan tes sukarela dari petugas terlatih setelah mendapatkan hasil pemeriksaan.</p>
                 <p>Dukungan bisa didapatkan dari:</p>
                 <ul>
                     <li><strong>Keluarga dan teman:</strong> Dukungan moral, bantuan persiapan dan pemulihan.</li>
@@ -271,28 +271,28 @@ const PatientPage = () => {
 
         {currentSection === 2 && (
           <section id="persiapan-fisik" className="content-section">
-            <h2>💪 PERSIAPAN FISIK [cite: 24]</h2>
-             <p>Tidak hanya mental dan psikologis, persiapan operasi juga mencakup fisik[cite: 25].</p>
+            <h2>💪 PERSIAPAN FISIK</h2>
+             <p>Tidak hanya mental dan psikologis, persiapan operasi juga mencakup fisik.</p>
             <div className="prep-category">
               <h3>Persiapan Fisik Sebelum Operasi</h3>
-              <p>Beberapa persiapan fisik sebelum menjalani operasi yang harus Anda perhatikan, sebagai berikut[cite: 26]:</p>
+              <p>Beberapa persiapan fisik sebelum menjalani operasi yang harus Anda perhatikan, sebagai berikut:</p>
               <ul>
-                    <li>Kondisi fisik dalam keadaan sehat[cite: 27].</li>
-                    <li>Berhenti merokok jika Anda perokok[cite: 28].</li>
-                    <li>Berhenti menggunakan obat-obatan pengencer darah kurang lebih 5-7 hari sebelum operasi[cite: 29].</li>
-                    <li>Cukup istirahat[cite: 30].</li>
-                    <li>Kondisi tubuh memungkinkan menjalankan operasi sesuai rekomendasi dokter[cite: 31].</li>
+                    <li>Kondisi fisik dalam keadaan sehat.</li>
+                    <li>Berhenti merokok jika Anda perokok.</li>
+                    <li>Berhenti menggunakan obat-obatan pengencer darah kurang lebih 5-7 hari sebelum operasi.</li>
+                    <li>Cukup istirahat.</li>
+                    <li>Kondisi tubuh memungkinkan menjalankan operasi sesuai rekomendasi dokter.</li>
                     <li>Istirahat minimal 8 jam sebelum operasi.</li>
                     <li>Hindari konsumsi alkohol 48 jam sebelum operasi.</li>
               </ul>
             </div>
             <div className="prep-category">
-              <h3>Petunjuk Umum Sebelum Operasi [cite: 33]</h3>
+              <h3>Petunjuk Umum Sebelum Operasi</h3>
               <ul>
-                 <li>Datanglah sesuai dengan jadwal yang telah ditentukan[cite: 34].</li>
-                 <li>Puasa tidak makan dan minum selama kurang lebih 6 jam atau sesuai anjuran dokter[cite: 35].</li>
-                 <li>Tidak mengonsumsi obat pengencer darah (antikoagulan)[cite: 36]. Jika mengonsumsi, segera informasikan ke dokter bedah[cite: 37].</li>
-                 <li>Mandi menggunakan sabun antiseptik (chlorhexidine) 1 hari sebelum operasi atau sesuai petunjuk rumah sakit[cite: 38].</li>
+                 <li>Datanglah sesuai dengan jadwal yang telah ditentukan.</li>
+                 <li>Puasa tidak makan dan minum selama kurang lebih 6 jam atau sesuai anjuran dokter.</li>
+                 <li>Tidak mengonsumsi obat pengencer darah (antikoagulan). Jika mengonsumsi, segera informasikan ke dokter bedah.</li>
+                 <li>Mandi menggunakan sabun antiseptik (chlorhexidine) 1 hari sebelum operasi atau sesuai petunjuk rumah sakit.</li>
                  <li>Pakailah pakaian yang nyaman dan mudah dibuka.</li>
                  <li>Lepaskan semua perhiasan, jam tangan, dan aksesoris.</li>
                  <li>Kosongkan kandung kemih sebelum ke ruang operasi.</li>
@@ -319,92 +319,92 @@ const PatientPage = () => {
 
         {currentSection === 3 && (
           <section id="pencegahan-infeksi" className="content-section">
-            <h2>🦠 PENCEGAHAN INFEKSI DAERAH OPERASI [cite: 39]</h2>
+            <h2>🦠 PENCEGAHAN INFEKSI DAERAH OPERASI</h2>
 
             <div className="risk-category">
-                <h3>Mengenal Infeksi Daerah Operasi [cite: 40]</h3>
-                <p>Infeksi daerah operasi adalah infeksi yang terjadi karena kuman masuk dan berkembang ke dalam bagian tubuh yang sedang dioperasi atau di daerah sekitar operasi[cite: 41]. Kuman yang masuk dapat berupa bakteri, jamur, dan virus[cite: 42]. Jika tidak segera diobati, infeksi bisa berubah menjadi nanah, peradangan, pembengkakan, nyeri, dan demam[cite: 42].</p>
-                <p>Infeksi daerah operasi bisa terjadi kapan saja, baik 2-3 hari setelah bedah dilakukan, hingga luka tersebut sembuh, kecuali penggunaan alat-alat implant, seperti operasi pergantian sendi panggul dan lutut, yang mampu memakan waktu sampai satu tahun lamanya[cite: 43].</p>
-                <p>Kebanyakan infeksi daerah operasi merupakan infeksi yang tidak serius jika hanya mengenai kulit[cite: 44]. Namun, bisa menjadi serius jika infeksi daerah operasi masuk ke dalam lapisan jaringan[cite: 45].</p>
-                 <p><strong>Tanda-tanda infeksi[cite: 87]:</strong></p>
+                <h3>Mengenal Infeksi Daerah Operasi</h3>
+                <p>Infeksi daerah operasi adalah infeksi yang terjadi karena kuman masuk dan berkembang ke dalam bagian tubuh yang sedang dioperasi atau di daerah sekitar operasi. Kuman yang masuk dapat berupa bakteri, jamur, dan virus. Jika tidak segera diobati, infeksi bisa berubah menjadi nanah, peradangan, pembengkakan, nyeri, dan demam.</p>
+                <p>Infeksi daerah operasi bisa terjadi kapan saja, baik 2-3 hari setelah bedah dilakukan, hingga luka tersebut sembuh, kecuali penggunaan alat-alat implant, seperti operasi pergantian sendi panggul dan lutut, yang mampu memakan waktu sampai satu tahun lamanya.</p>
+                <p>Kebanyakan infeksi daerah operasi merupakan infeksi yang tidak serius jika hanya mengenai kulit. Namun, bisa menjadi serius jika infeksi daerah operasi masuk ke dalam lapisan jaringan.</p>
+                 <p><strong>Tanda-tanda infeksi:</strong></p>
                  <ul>
-                    <li>Kemerahan dan rasa nyeri pada luka operasi[cite: 88].</li>
-                    <li>Demam ≥38°C[cite: 89].</li>
-                    <li>Bengkak pada sekitar luka[cite: 90].</li>
-                    <li>Keluar cairan atau rembesan dari luka[cite: 91].</li>
+                    <li>Kemerahan dan rasa nyeri pada luka operasi.</li>
+                    <li>Demam ≥38°C.</li>
+                    <li>Bengkak pada sekitar luka.</li>
+                    <li>Keluar cairan atau rembesan dari luka.</li>
                     <li>Bau tidak sedap dari luka.</li>
                     <li>Luka terasa hangat.</li>
                 </ul>
             </div>
 
              <div className="risk-category">
-                <h3>Faktor Risiko Infeksi Daerah Operasi [cite: 46]</h3>
-                <p>Terdapat sejumlah faktor yang mampu meningkatkan risiko infeksi daerah operasi pada seseorang, antara lain sebagai berikut[cite: 47]:</p>
+                <h3>Faktor Risiko Infeksi Daerah Operasi</h3>
+                <p>Terdapat sejumlah faktor yang mampu meningkatkan risiko infeksi daerah operasi pada seseorang, antara lain sebagai berikut:</p>
                 <ul>
-                    <li>Usia dan jenis kelamin[cite: 48].</li>
-                    <li>Kegemukan (obesitas)[cite: 49].</li>
-                    <li>Mempunyai penyakit penyerta, seperti diabetes, sehingga dapat memengaruhi respons imun secara umum[cite: 50].</li>
-                    <li>Perokok berat[cite: 51].</li>
-                    <li>Tindakan operasi lebih kompleks dan lama[cite: 52].</li>
-                    <li>Tindakan bedah yang mengenai bagian tubuh yang sudah terdapat bakteri, seperti usus[cite: 53].</li>
+                    <li>Usia dan jenis kelamin.</li>
+                    <li>Kegemukan (obesitas).</li>
+                    <li>Mempunyai penyakit penyerta, seperti diabetes, sehingga dapat memengaruhi respons imun secara umum.</li>
+                    <li>Perokok berat.</li>
+                    <li>Tindakan operasi lebih kompleks dan lama.</li>
+                    <li>Tindakan bedah yang mengenai bagian tubuh yang sudah terdapat bakteri, seperti usus.</li>
                 </ul>
              </div>
 
               <div className="prep-category">
-                <h3>Cara Mencegah Infeksi Daerah Operasi [cite: 55]</h3>
-                 <p>Infeksi daerah operasi dapat dicegah dengan perawatan sebelum, selama, dan sesudah tindakan operasi (di ruang perawatan)[cite: 56].</p>
+                <h3>Cara Mencegah Infeksi Daerah Operasi</h3>
+                 <p>Infeksi daerah operasi dapat dicegah dengan perawatan sebelum, selama, dan sesudah tindakan operasi (di ruang perawatan).</p>
 
-                 <h4>Sebelum Operasi[cite: 57]:</h4>
-                 <p>Beberapa langkah perawatan yang bisa dilakukan untuk mencegah infeksi sebelum operasi, sebagai berikut[cite: 58]:</p>
+                 <h4>Sebelum Operasi:</h4>
+                 <p>Beberapa langkah perawatan yang bisa dilakukan untuk mencegah infeksi sebelum operasi, sebagai berikut:</p>
                  <ul>
-                    <li>Menjaga kebersihan diri, dengan mandi terlebih dahulu sebelum operasi dilakukan dan jangan menggunakan make up[cite: 59].</li>
-                    <li>Jika harus melakukan pencukuran rambut area operasi, gunakan clipper agar tidak iritasi[cite: 60].</li>
-                    <li>Mengganti baju yang telah disediakan oleh rumah sakit[cite: 61].</li>
-                    <li>Pemberian profilaksis (antibiotik pencegahan) hanya pada kasus tertentu (diberikan 30-60 menit) sebelum sayatan dimulai sesuai instruksi dokter[cite: 62].</li>
+                    <li>Menjaga kebersihan diri, dengan mandi terlebih dahulu sebelum operasi dilakukan dan jangan menggunakan make up.</li>
+                    <li>Jika harus melakukan pencukuran rambut area operasi, gunakan clipper agar tidak iritasi.</li>
+                    <li>Mengganti baju yang telah disediakan oleh rumah sakit.</li>
+                    <li>Pemberian profilaksis (antibiotik pencegahan) hanya pada kasus tertentu (diberikan 30-60 menit) sebelum sayatan dimulai sesuai instruksi dokter.</li>
                 </ul>
 
-                 <h4>Selama Operasi[cite: 63]:</h4>
-                 <p>Tim bedah akan melakukan prosedur[cite: 64]:</p>
+                 <h4>Selama Operasi:</h4>
+                 <p>Tim bedah akan melakukan prosedur:</p>
                  <ul>
-                    <li>Mencuci tangan[cite: 65].</li>
-                    <li>Menggunakan baju operasi steril[cite: 66].</li>
-                    <li>Menggunakan sarung tangan steril[cite: 67].</li>
-                    <li>Menggunakan antiseptik untuk membersihkan kulit di daerah sayatan[cite: 68].</li>
-                    <li>Selama tindakan bedah, kebutuhan akan oksigen, keseimbangan cairan, hingga suhu tubuh akan terus dipantau[cite: 69].</li>
-                    <li>Luka operasi akan ditutup secara steril[cite: 70].</li>
+                    <li>Mencuci tangan.</li>
+                    <li>Menggunakan baju operasi steril.</li>
+                    <li>Menggunakan sarung tangan steril.</li>
+                    <li>Menggunakan antiseptik untuk membersihkan kulit di daerah sayatan.</li>
+                    <li>Selama tindakan bedah, kebutuhan akan oksigen, keseimbangan cairan, hingga suhu tubuh akan terus dipantau.</li>
+                    <li>Luka operasi akan ditutup secara steril.</li>
                 </ul>
 
-                 <h4>Sesudah Operasi (di Ruang Perawatan)[cite: 72]:</h4>
-                  <p>Beberapa perawatan yang dilakukan di bangsal atau di rumah sakit seusai operasi[cite: 73]:</p>
+                 <h4>Sesudah Operasi (di Ruang Perawatan):</h4>
+                  <p>Beberapa perawatan yang dilakukan di bangsal atau di rumah sakit seusai operasi:</p>
                  <ul>
-                    <li>Perawatan luka selalu dilakukan secara aseptik (teknik steril) selama berada di kamar perawatan[cite: 74].</li>
-                    <li>Perawat selalu melakukan hand hygiene sebelum melakukan tindakan perawatan luka[cite: 75].</li>
-                    <li>Balutan luka khusus bila sudah lepas jahitan agar tidak mudah kotor atau basah[cite: 76].</li>
-                    <li>Perawat akan selalu memantau kondisi luka dan suhu tubuh[cite: 77].</li>
+                    <li>Perawatan luka selalu dilakukan secara aseptik (teknik steril) selama berada di kamar perawatan.</li>
+                    <li>Perawat selalu melakukan hand hygiene sebelum melakukan tindakan perawatan luka.</li>
+                    <li>Balutan luka khusus bila sudah lepas jahitan agar tidak mudah kotor atau basah.</li>
+                    <li>Perawat akan selalu memantau kondisi luka dan suhu tubuh.</li>
                 </ul>
             </div>
 
             <div className="phase">
-                <h3>Perawatan Luka Setelah Pulang dari Rumah Sakit [cite: 78]</h3>
+                <h3>Perawatan Luka Setelah Pulang dari Rumah Sakit</h3>
                  <p>Perawatan pada luka operasi setelah pulang dari rumah sakit:</p>
                  <ul>
-                    <li>3-5 hari setelah operasi, jaga balutan agar tetap kering, utuh, dan bersih[cite: 79].</li>
-                    <li>Tanyakan pada dokter mengenai waktu yang tepat untuk melepas balutan pada luka atau datang kembali untuk kontrol[cite: 80].</li>
-                    <li>Cuci tangan sebelum dan sesudah menyentuh luka[cite: 81].</li>
-                    <li>Jika balutan basah, segera cari orang yang kompeten untuk mengganti balutan atau datang ke unit pelayanan kesehatan terdekat[cite: 82].</li>
-                    <li>Makan makanan tinggi protein, seperti telur dan susu[cite: 83].</li>
-                    <li>Segera hubungi atau kunjungi Siloam Hospitals terdekat jika mengalami tanda-tanda infeksi[cite: 84].</li>
+                    <li>3-5 hari setelah operasi, jaga balutan agar tetap kering, utuh, dan bersih.</li>
+                    <li>Tanyakan pada dokter mengenai waktu yang tepat untuk melepas balutan pada luka atau datang kembali untuk kontrol.</li>
+                    <li>Cuci tangan sebelum dan sesudah menyentuh luka.</li>
+                    <li>Jika balutan basah, segera cari orang yang kompeten untuk mengganti balutan atau datang ke unit pelayanan kesehatan terdekat.</li>
+                    <li>Makan makanan tinggi protein, seperti telur dan susu.</li>
+                    <li>Segera hubungi atau kunjungi Siloam Hospitals terdekat jika mengalami tanda-tanda infeksi.</li>
                 </ul>
              </div>
 
              <div className="reminder">
-                 <h4>Cara Memantau Luka Operasi di Rumah [cite: 85]</h4>
-                 <p>Infeksi masih dapat terjadi setelah pasien keluar dari rumah sakit atau pulang ke rumah[cite: 86]. Kenali tanda-tanda infeksi[cite: 87]:</p>
+                 <h4>Cara Memantau Luka Operasi di Rumah</h4>
+                 <p>Infeksi masih dapat terjadi setelah pasien keluar dari rumah sakit atau pulang ke rumah. Kenali tanda-tanda infeksi:</p>
                  <ul>
-                    <li>Kemerahan dan rasa nyeri pada luka operasi[cite: 88].</li>
-                    <li>Demam ≥38°C[cite: 89].</li>
-                    <li>Bengkak pada sekitar luka[cite: 90].</li>
-                    <li>Keluar cairan atau rembesan dari luka[cite: 91].</li>
+                    <li>Kemerahan dan rasa nyeri pada luka operasi.</li>
+                    <li>Demam ≥38°C.</li>
+                    <li>Bengkak pada sekitar luka.</li>
+                    <li>Keluar cairan atau rembesan dari luka.</li>
                 </ul>
              </div>
 
@@ -418,79 +418,79 @@ const PatientPage = () => {
 
         {currentSection === 4 && (
           <section id="pengelolaan-nyeri" className="content-section">
-            <h2>😣 PENGELOLAAN NYERI (Panduan untuk Pasien) [cite: 93, 108]</h2>
+            <h2>😣 PENGELOLAAN NYERI (Panduan untuk Pasien)</h2>
             <div className="prep-category">
-                <h3>Mengenal Nyeri [cite: 94]</h3>
-                <p>Nyeri adalah suatu pengalaman sensori dan emosional yang tidak menyenangkan, yang diakibatkan oleh kerusakan jaringan yang tampak maupun tidak tampak[cite: 95]. Nyeri dapat diakibatkan oleh panas, dingin, tekanan, pembedahan/luka, bahkan cahaya yang sangat terang[cite: 96]. Nyeri dapat memengaruhi tubuh secara keseluruhan dan dapat menimbulkan dampak yang serius[cite: 97].</p>
-                <p>Hanya Anda yang dapat menjelaskan bagaimana jenis dan karakter nyeri yang dialami[cite: 98]. Hal ini dikarenakan, setiap orang memiliki reaksi yang berbeda-beda terhadap nyeri[cite: 99].</p>
+                <h3>Mengenal Nyeri</h3>
+                <p>Nyeri adalah suatu pengalaman sensori dan emosional yang tidak menyenangkan, yang diakibatkan oleh kerusakan jaringan yang tampak maupun tidak tampak. Nyeri dapat diakibatkan oleh panas, dingin, tekanan, pembedahan/luka, bahkan cahaya yang sangat terang. Nyeri dapat memengaruhi tubuh secara keseluruhan dan dapat menimbulkan dampak yang serius.</p>
+                <p>Hanya Anda yang dapat menjelaskan bagaimana jenis dan karakter nyeri yang dialami. Hal ini dikarenakan, setiap orang memiliki reaksi yang berbeda-beda terhadap nyeri.</p>
             </div>
              <div className="prep-category">
-                <h3>Tujuan Pengelolaan Nyeri [cite: 100]</h3>
-                <p>Pengelolaan nyeri yang baik akan membantu Anda dalam beberapa hal, sebagai berikut[cite: 101]:</p>
+                <h3>Tujuan Pengelolaan Nyeri</h3>
+                <p>Pengelolaan nyeri yang baik akan membantu Anda dalam beberapa hal, sebagai berikut:</p>
                 <ul>
-                    <li>Memberikan rasa nyaman pada waktu pemulihan[cite: 102].</li>
-                    <li>Mempercepat proses penyembuhan[cite: 103].</li>
-                    <li>Mempermudah Anda dalam bergerak[cite: 104].</li>
+                    <li>Memberikan rasa nyaman pada waktu pemulihan.</li>
+                    <li>Mempercepat proses penyembuhan.</li>
+                    <li>Mempermudah Anda dalam bergerak.</li>
                 </ul>
-                 <p>Ada beberapa kekhawatiran mengenai obat nyeri yang akan menimbulkan ketagihan[cite: 105]. Pada kenyataannya, pemberian obat nyeri yang memadai, berdasarkan resep, dan sesuai kebutuhan, tidak akan menimbulkan ketagihan[cite: 106].</p>
+                 <p>Ada beberapa kekhawatiran mengenai obat nyeri yang akan menimbulkan ketagihan. Pada kenyataannya, pemberian obat nyeri yang memadai, berdasarkan resep, dan sesuai kebutuhan, tidak akan menimbulkan ketagihan.</p>
             </div>
             <div className="risk-category">
-                <h3>Pengobatan Nyeri Tanpa Penggunaan Obat [cite: 109]</h3>
-                <p>Terdapat sejumlah teknik pengobatan yang mengurangi nyeri tanpa harus melibatkan obat, antara lain[cite: 110]:</p>
+                <h3>Pengobatan Nyeri Tanpa Penggunaan Obat</h3>
+                <p>Terdapat sejumlah teknik pengobatan yang mengurangi nyeri tanpa harus melibatkan obat, antara lain:</p>
                 <ul>
-                    <li>Teknik memijat atau massage[cite: 111].</li>
-                    <li>Posisi tidur yang nyaman, sehingga dapat mengurangi tekanan pada luka[cite: 112].</li>
-                    <li>Kompres dingin atau panas[cite: 113].</li>
-                    <li>Relaksasi dan meditasi[cite: 114].</li>
-                    <li>Teknik distraksi (mengalihkan perhatian)[cite: 115].</li>
-                    <li>Relaksasi dengan musik[cite: 116].</li>
-                    <li>Aromaterapi[cite: 117].</li>
+                    <li>Teknik memijat atau massage.</li>
+                    <li>Posisi tidur yang nyaman, sehingga dapat mengurangi tekanan pada luka.</li>
+                    <li>Kompres dingin atau panas.</li>
+                    <li>Relaksasi dan meditasi.</li>
+                    <li>Teknik distraksi (mengalihkan perhatian).</li>
+                    <li>Relaksasi dengan musik.</li>
+                    <li>Aromaterapi.</li>
                 </ul>
-                <p>Semua teknik yang disebutkan, tentunya harus disesuaikan dengan kondisi tubuh, jenis operasi yang dilakukan, keadaan lingkungan, dan saran dari dokter[cite: 118].</p>
+                <p>Semua teknik yang disebutkan, tentunya harus disesuaikan dengan kondisi tubuh, jenis operasi yang dilakukan, keadaan lingkungan, dan saran dari dokter.</p>
             </div>
             <div className="phase">
-                <h3>Pengobatan Nyeri dengan Penggunaan Obat [cite: 119]</h3>
-                 <p>Banyak yang beranggapan bahwa nyeri adalah sesuatu yang wajar dan harus ditahan[cite: 120]. Dengan jenis pengobatan yang ada saat ini, Anda seharusnya tidak harus menderita karena nyeri[cite: 121]. Jadi, penting untuk menginformasikan rasa nyeri yang dirasakan agar bisa diberi penanganan yang tepat[cite: 122]. Jika sebelumnya pernah mengalami nyeri yang sama dan sembuh, Anda disarankan untuk menginformasikan obat maupun cara yang dilakukan untuk menghilangkan nyeri tersebut[cite: 123].</p>
-                 <p>Biasanya jika pengobatan nyeri menggunakan obat, akan dilakukan dengan beberapa bentuk pemberian obat, sebagai berikut[cite: 124]:</p>
+                <h3>Pengobatan Nyeri dengan Penggunaan Obat</h3>
+                 <p>Banyak yang beranggapan bahwa nyeri adalah sesuatu yang wajar dan harus ditahan. Dengan jenis pengobatan yang ada saat ini, Anda seharusnya tidak harus menderita karena nyeri. Jadi, penting untuk menginformasikan rasa nyeri yang dirasakan agar bisa diberi penanganan yang tepat. Jika sebelumnya pernah mengalami nyeri yang sama dan sembuh, Anda disarankan untuk menginformasikan obat maupun cara yang dilakukan untuk menghilangkan nyeri tersebut.</p>
+                 <p>Biasanya jika pengobatan nyeri menggunakan obat, akan dilakukan dengan beberapa bentuk pemberian obat, sebagai berikut:</p>
                  <ul>
-                    <li>Tablet[cite: 126].</li>
-                    <li>Injeksi (suntikan)[cite: 127].</li>
-                    <li>Suppositoria atau yang umum diberikan lewat anus[cite: 128].</li>
-                    <li>Injeksi terus-menerus melalui infus[cite: 129].</li>
-                    <li>Melalui kateter epidural[cite: 130].</li>
+                    <li>Tablet.</li>
+                    <li>Injeksi (suntikan).</li>
+                    <li>Suppositoria atau yang umum diberikan lewat anus.</li>
+                    <li>Injeksi terus-menerus melalui infus.</li>
+                    <li>Melalui kateter epidural.</li>
                     <li>Patch atau plester kulit.</li>
                     <li>PCA (Patient Controlled Analgesia).</li>
                 </ul>
-                 <p>Obat anti nyeri sebaiknya diminum secara teratur, yakni 3-4 hari sesudah pembedahan sampai nyerinya berkurang dan hilang[cite: 131]. Beberapa jenis obat anti nyeri bekerja sebagai background untuk mengurangi tingkat nyeri[cite: 132]. Hal ini berarti Anda harus tetap meminum obat anti nyeri, walaupun skala nyeri yang dirasakan rendah[cite: 133]. Sering kali, Anda akan disarankan menggunakan kombinasi obat anti nyeri untuk memberikan efek lebih baik dibanding hanya satu obat saja dengan dosis tinggi[cite: 134].</p>
+                 <p>Obat anti nyeri sebaiknya diminum secara teratur, yakni 3-4 hari sesudah pembedahan sampai nyerinya berkurang dan hilang. Beberapa jenis obat anti nyeri bekerja sebagai background untuk mengurangi tingkat nyeri. Hal ini berarti Anda harus tetap meminum obat anti nyeri, walaupun skala nyeri yang dirasakan rendah. Sering kali, Anda akan disarankan menggunakan kombinasi obat anti nyeri untuk memberikan efek lebih baik dibanding hanya satu obat saja dengan dosis tinggi.</p>
             </div>
             <div className="important-note">
-                <h3>Peran Anda dalam Pengelolaan Nyeri [cite: 135]</h3>
-                <p>Tidak hanya dokter dan petugas medis, Anda juga bisa berperan dalam mengelola nyeri yang dirasakan[cite: 136]. Caranya adalah menginformasikan nyeri yang Anda rasakan secara rinci dan tepat[cite: 137].</p>
-                <p>Beberapa informasi yang sebaiknya dikomunikasikan, sebagai berikut[cite: 138]:</p>
+                <h3>Peran Anda dalam Pengelolaan Nyeri</h3>
+                <p>Tidak hanya dokter dan petugas medis, Anda juga bisa berperan dalam mengelola nyeri yang dirasakan. Caranya adalah menginformasikan nyeri yang Anda rasakan secara rinci dan tepat.</p>
+                <p>Beberapa informasi yang sebaiknya dikomunikasikan, sebagai berikut:</p>
                 <ul>
-                    <li>Lokasi nyeri[cite: 139].</li>
-                    <li>Berat ringannya nyeri yang dirasakan, terutama pada saat napas dalam, batuk, beraktivitas, dan saat istirahat[cite: 140]. Anda akan ditanya beberapa skor nyeri yang dirasakan untuk kemudian dapat dievaluasi[cite: 141].</li>
-                    <li>Efektivitas pengobatan nyeri yang saat ini didapat dan jumlah waktu yang diperlukan hingga dapat mengurangi nyeri[cite: 142].</li>
-                    <li>Hal-hal lainnya seperti kemungkinan efek samping, antara lain gatal-gatal, mual, muntah, dan efek lainnya[cite: 143]. Efek samping ini umumnya dapat diatasi[cite: 144].</li>
-                    <li>Sembelit atau susah buang air besar dapat terjadi apabila Anda menggunakan obat-obat anti nyeri yang cukup kuat, jadi ada kemungkinan Anda akan memerlukan obat pencahar[cite: 145].</li>
+                    <li>Lokasi nyeri.</li>
+                    <li>Berat ringannya nyeri yang dirasakan, terutama pada saat napas dalam, batuk, beraktivitas, dan saat istirahat. Anda akan ditanya beberapa skor nyeri yang dirasakan untuk kemudian dapat dievaluasi.</li>
+                    <li>Efektivitas pengobatan nyeri yang saat ini didapat dan jumlah waktu yang diperlukan hingga dapat mengurangi nyeri.</li>
+                    <li>Hal-hal lainnya seperti kemungkinan efek samping, antara lain gatal-gatal, mual, muntah, dan efek lainnya. Efek samping ini umumnya dapat diatasi.</li>
+                    <li>Sembelit atau susah buang air besar dapat terjadi apabila Anda menggunakan obat-obat anti nyeri yang cukup kuat, jadi ada kemungkinan Anda akan memerlukan obat pencahar.</li>
                 </ul>
-                <p>Dengan menginformasikan hal-hal di atas, dokter dan petugas medis bisa membantu Anda dalam memilih jenis obat anti nyeri yang cocok untuk nyeri Anda, sehingga pengobatan pun bisa maksimal[cite: 146].</p>
+                <p>Dengan menginformasikan hal-hal di atas, dokter dan petugas medis bisa membantu Anda dalam memilih jenis obat anti nyeri yang cocok untuk nyeri Anda, sehingga pengobatan pun bisa maksimal.</p>
             </div>
             <div className="important-note">
-              <h4>📊 Alat Pengukur Skor Nyeri [cite: 148]</h4>
-              <p>Anda akan diberikan pertanyaan oleh perawat mengenai skor nyeri dengan menggunakan alat seperti di bawah ini[cite: 149]. Hal tersebut akan membantu dokter mengetahui tingkat nyeri Anda[cite: 150].</p>
+              <h4>📊 Alat Pengukur Skor Nyeri</h4>
+              <p>Anda akan diberikan pertanyaan oleh perawat mengenai skor nyeri dengan menggunakan alat seperti di bawah ini. Hal tersebut akan membantu dokter mengetahui tingkat nyeri Anda.</p>
               <div className="pain-scale-description">
-                <p><strong>0 [cite: 156]:</strong> TIDAK NYERI [cite: 151] / TIDAK SAKIT [cite: 167, 168]</p>
-                <p><strong>1-3 [cite: 157-159]:</strong> NYERI RINGAN [cite: 152] / SAKIT YANG RINGAN [cite: 173]</p>
-                <p><strong>4-6 [cite: 160-162]:</strong> NYERI YANG MENGANGGU [cite: 153] / SAKIT YANG MENGGANGGU [cite: 169]</p>
-                <p><strong>7-9 [cite: 163-165]:</strong> NYERI HEBAT [cite: 154] / SAKIT HEBAT [cite: 171, 175]</p>
-                <p><strong>10 [cite: 166]:</strong> NYERI SANGAT HEBAT [cite: 155] / SAKIT SANGAT HEBAT [cite: 172, 176]</p>
+                <p><strong>0:</strong> TIDAK NYERI / TIDAK SAKIT</p>
+                <p><strong>1-3:</strong> NYERI RINGAN / SAKIT YANG RINGAN</p>
+                <p><strong>4-6:</strong> NYERI YANG MENGANGGU / SAKIT YANG MENGGANGGU</p>
+                <p><strong>7-9:</strong> NYERI HEBAT / SAKIT HEBAT</p>
+                <p><strong>10:</strong> NYERI SANGAT HEBAT / SAKIT SANGAT HEBAT</p>
               </div>
               <p>Beritahu perawat jika skor nyeri Anda ≥4 untuk mendapatkan penanganan yang tepat.</p>
             </div>
              <div className="prep-category">
-                <h3>Informasi Obat Anti Nyeri Saat Pulang [cite: 177]</h3>
-                <p>Mintalah informasi mengenai obat anti nyeri yang memerlukan konsumsi lanjutan di rumah[cite: 178]. Jika nyeri masih terasa setelah obat habis, segera konsultasikan ke dokter[cite: 179]. Lalu, apabila sebelumnya Anda juga sudah mengonsumsi obat anti nyeri, sebaiknya informasikan juga nama obat serta dosisnya kepada dokter maupun petugas medis, terutama jika hendak melakukan operasi[cite: 180]. Hal ini akan memengaruhi pemilihan obat anti nyeri yang tepat setelah operasi[cite: 181].</p>
+                <h3>Informasi Obat Anti Nyeri Saat Pulang</h3>
+                <p>Mintalah informasi mengenai obat anti nyeri yang memerlukan konsumsi lanjutan di rumah. Jika nyeri masih terasa setelah obat habis, segera konsultasikan ke dokter. Lalu, apabila sebelumnya Anda juga sudah mengonsumsi obat anti nyeri, sebaiknya informasikan juga nama obat serta dosisnya kepada dokter maupun petugas medis, terutama jika hendak melakukan operasi. Hal ini akan memengaruhi pemilihan obat anti nyeri yang tepat setelah operasi.</p>
             </div>
             <PetugasParaf sectionKey="paraf4" isChecked={petugasCheckboxes.paraf4} onChange={handlePetugasCheckChange} isReadOnly={isReadOnly} label="Pengelolaan Nyeri" />
             <div className="section-navigation">
@@ -505,10 +505,10 @@ const PatientPage = () => {
             <h2>📝 FORMULIR PERSETUJUAN TINDAKAN</h2>
             <div className="consent-declaration">
               <div className="declaration-text">
-                <p><strong>Surat Persetujuan Tindakan (Informed Consent) [cite: 20]</strong><br/>
-                Dokter akan memberikan penjelasan tentang risiko, keuntungan, dan alternatif pengobatan kepada pasien dan keluarga[cite: 21].
-                Pasien dan keluarga dalam kondisi sadar, bebas mengambil keputusan untuk memberikan persetujuan agar tindakan operasi dapat dijalankan[cite: 22].</p>
-                <p>Persiapan yang baik selama periode operasi akan membantu menurunkan komplikasi operasi dan mempercepat pemulihan setelah operasi[cite: 23].</p>
+                <p><strong>Surat Persetujuan Tindakan (Informed Consent)</strong><br/>
+                Dokter akan memberikan penjelasan tentang risiko, keuntungan, dan alternatif pengobatan kepada pasien dan keluarga.
+                Pasien dan keluarga dalam kondisi sadar, bebas mengambil keputusan untuk memberikan persetujuan agar tindakan operasi dapat dijalankan.</p>
+                <p>Persiapan yang baik selama periode operasi akan membantu menurunkan komplikasi operasi dan mempercepat pemulihan setelah operasi.</p>
 
                 <p>Saya yang bertanda tangan di bawah ini, <strong>{patient.NamaPasien}</strong> (Nomor MR: <strong>{patient.NomorMR}</strong>), setelah membaca dan memahami seluruh informasi dalam booklet ini, dengan ini menyatakan:</p>
 
