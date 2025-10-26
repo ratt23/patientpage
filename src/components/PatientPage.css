@@ -501,3 +501,104 @@
   .btn-submit-consent { padding: 15px 25px; font-size: 16px; }
   .check-icon { font-size: 18px; }
 }
+/* --- TAMBAHKAN CSS INI DI AKHIR FILE PatientPage.css --- */
+
+/* Style untuk Modal Petugas */
+.petugas-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  backdrop-filter: blur(5px);
+}
+
+.petugas-modal-content {
+  background: white;
+  padding: 30px 35px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 450px;
+  text-align: left;
+}
+
+.petugas-modal-content h3 {
+  color: #2b3b98;
+  margin: 0 0 10px 0;
+  font-size: 22px;
+}
+
+.petugas-modal-content p {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.petugas-modal-content .form-group {
+  margin-bottom: 20px;
+}
+
+.petugas-modal-content label {
+  font-weight: bold;
+  color: #495057;
+  margin-bottom: 8px;
+  font-size: 14px;
+  display: block;
+}
+
+.petugas-modal-content input {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 16px;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  box-sizing: border-box; /* Penting */
+}
+
+.petugas-modal-content input:focus {
+  border-color: #2b3b98;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(43, 59, 152, 0.2);
+}
+
+.btn-submit-petugas {
+  background: #28a745;
+  color: white;
+  width: 100%;
+  border: none;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-submit-petugas:hover {
+  background: #218838;
+}
+
+/* Style untuk Paraf Petugas */
+.petugas-paraf-container {
+  margin-top: 30px;
+  padding-top: 25px;
+  border-top: 2px solid #e9ecef;
+}
+
+.consent-item-checkbox.paraf {
+  background: #f0e6ff; /* Warna ungu muda untuk membedakan */
+  border-color: #d3c4ff;
+}
+
+.consent-item-checkbox.paraf .consent-text {
+  font-weight: 500;
+  font-style: italic;
+  color: #553c9a;
+}

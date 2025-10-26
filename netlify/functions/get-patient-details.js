@@ -1,7 +1,6 @@
 // patient-app/netlify/functions/get-patient-details.js
 const { Pool } = require('pg');
 
-// --- Koneksi Pool (Sudah Termasuk Error Handling) ---
 let pool;
 let initializationError = null;
 try {
@@ -21,7 +20,6 @@ try {
   console.error("Error during pool initialization:", error);
   initializationError = "Error during pool initialization: " + error.message;
 }
-// --- Akhir Koneksi Pool ---
 
 exports.handler = async function (event, context) {
   console.log('=== get-patient-details called ===');
@@ -29,7 +27,6 @@ exports.handler = async function (event, context) {
     return { statusCode: 500, headers: { 'Access-Control-Allow-Origin': '*' }, body: JSON.stringify({ error: 'Gagal menginisialisasi koneksi database', details: initializationError || 'Pool is not available.'}), };
   }
   
-  // --- PERUBAHAN: Cari 'token', bukan 'NomorMR' ---
   const { token } = event.queryStringParameters;
 
   if (!token) {
@@ -41,21 +38,22 @@ exports.handler = async function (event, context) {
   }
 
   console.log('Fetching details for Token:', token);
-  // --- AKHIR PERUBAHAN ---
 
   let client;
   try {
     client = await pool.connect();
     console.log('Database connected, querying patient details...');
     
-    // --- PERUBAHAN UTAMA DI SINI (Query SQL diubah) ---
+    // --- PERUBAHAN UTAMA DI SINI ---
+    // Tambahkan "NamaPetugas" dan "PetugasParafData" ke query
     const result = await client.query(
       `SELECT "NomorMR", "NamaPasien", "JadwalOperasi", "Dokter", 
               "StatusPersetujuan", "TimestampPersetujuan",
-              "PersetujuanData", "SignatureData"
+              "PersetujuanData", "SignatureData",
+              "NamaPetugas", "PetugasParafData" 
        FROM patients 
-       WHERE "TokenAkses" = $1`, // <-- Menggunakan TokenAkses
-      [token] // <-- Menggunakan token
+       WHERE "TokenAkses" = $1`,
+      [token]
     );
     // --- AKHIR PERUBAHAN ---
     
@@ -68,8 +66,6 @@ exports.handler = async function (event, context) {
       };
     }
 
-    // Kita tetap mengirim NomorMR ke frontend, karena dibutuhkan
-    // untuk fungsi 'submit-approval'
     console.log('Patient found:', result.rows[0].NamaPasien);
     return {
       statusCode: 200,
