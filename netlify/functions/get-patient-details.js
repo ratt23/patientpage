@@ -48,14 +48,16 @@ exports.handler = async function (event, context) {
     client = await pool.connect();
     console.log('Database connected, querying patient details...');
     
-    // --- PERUBAHAN: SELECT ... WHERE "TokenAkses" = $1 ---
+    // --- PERUBAHAN UTAMA DI SINI (Query SQL diubah) ---
     const result = await client.query(
       `SELECT "NomorMR", "NamaPasien", "JadwalOperasi", "Dokter", 
-              "StatusPersetujuan", "TimestampPersetujuan"
+              "StatusPersetujuan", "TimestampPersetujuan",
+              "PersetujuanData", "SignatureData"
        FROM patients 
-       WHERE "TokenAkses" = $1`, // <-- INI ADALAH KUNCI KEAMANAN
-      [token] // <-- Gunakan token
+       WHERE "TokenAkses" = $1`, // <-- Menggunakan TokenAkses
+      [token] // <-- Menggunakan token
     );
+    // --- AKHIR PERUBAHAN ---
     
     if (result.rows.length === 0) {
       console.log('Patient not found for token:', token);

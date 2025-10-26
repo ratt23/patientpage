@@ -1,7 +1,7 @@
 // D:\patient-app\netlify\functions\submit-approval.js
 
 const { Pool } = require('pg');
-const { PDFDocument, rgb } = require('pdf-lib');
+// const { PDFDocument, rgb } = require('pdf-lib'); <-- DIHAPUS
 
 // Konfigurasi database
 const pool = new Pool({
@@ -78,9 +78,9 @@ exports.handler = async function (event, context) {
   // FLEXIBLE DATA HANDLING - terima berbagai format
   const { 
     token,           // Format baru (dari patient app)
-    persetujuanData, // Format baru  
+    persetujuanData, // Format baru (Data checkbox dari PatientPage.js)
     NomorMR,         // Format lama
-    signature_data,  // Format lama
+    signature_data,  // Format lama (Gambar TTD dari PatientPage.js)
     patientData,
     formData
   } = body;
@@ -89,7 +89,10 @@ exports.handler = async function (event, context) {
   const identifier = token || NomorMR;
   
   // Pastikan data persetujuan valid untuk JSON
+  // --- PERUBAHAN DI SINI ---
+  // Kita utamakan 'persetujuanData' yang dikirim dari PatientPage.js
   const rawApprovalData = persetujuanData || patientData || formData || body;
+  // --- AKHIR PERUBAHAN ---
   const safeApprovalData = ensureValidJSON(rawApprovalData);
 
   console.log('Using identifier:', identifier);
@@ -165,21 +168,10 @@ exports.handler = async function (event, context) {
       };
     }
 
-    // UPDATE DATA - gunakan identifier yang berhasil
-    // HANYA simpan signature_data jika itu string biasa, bukan base64 image
-    let safeSignatureData = null;
-    if (signature_data && typeof signature_data === 'string') {
-      // Jika signature_data adalah base64 image, jangan simpan di JSON
-      // Simpan hanya jika itu bukan data gambar yang besar
-      if (!signature_data.startsWith('data:image/') && signature_data.length < 1000) {
-        safeSignatureData = signature_data;
-      } else {
-        console.log('Skipping large base64 image signature data');
-        // Untuk base64 image, kita bisa simpan di kolom terpisah atau skip
-        // Atau simpan sebagai string truncated
-        safeSignatureData = '[base64_image_signature]';
-      }
-    }
+    // UPDATE DATA
+    // --- PERUBAHAN DI SINI ---
+    // 'safeSignatureData' sekarang mengambil langsung dari 'signature_data' (base64)
+    let safeSignatureData = signature_data || null;
 
     const updateQuery = `
       UPDATE patients 
@@ -191,48 +183,18 @@ exports.handler = async function (event, context) {
       WHERE "NomorMR" = $3
       RETURNING *`;
 
-    console.log('Executing update with safe JSON data');
+    console.log('Executing update with safe JSON data and signature');
     const result = await client.query(updateQuery, [
-      safeApprovalData, 
-      safeSignatureData, 
+      safeApprovalData,   // Data checkbox (JSON)
+      safeSignatureData,  // Data TTD (base64 string)
       patient.NomorMR
     ]);
+    // --- AKHIR PERUBAHAN ---
 
     const updatedPatient = result.rows[0];
     console.log('Approval updated for:', updatedPatient.NamaPasien);
     
-    // GENERATE PDF
-    console.log('Generating PDF...');
-    const pdfDoc = await PDFDocument.create();
-    const page = pdfDoc.addPage([600, 400]);
-    const { width, height } = page.getSize();
-    
-    // Konten PDF
-    page.drawText('BUKTI PERSETUJUAN TINDAKAN OPERASI', { 
-      x: 50, y: height - 60, size: 18, color: rgb(0, 0, 0) 
-    });
-    page.drawText(`Nama Pasien: ${updatedPatient.NamaPasien}`, { 
-      x: 50, y: height - 100, size: 12 
-    });
-    page.drawText(`Nomor MR: ${updatedPatient.NomorMR}`, { 
-      x: 50, y: height - 120, size: 12 
-    });
-    
-    if (updatedPatient.JadwalOperasi) {
-      page.drawText(`Jadwal Operasi: ${new Date(updatedPatient.JadwalOperasi).toLocaleDateString('id-ID')}`, { 
-        x: 50, y: height - 140, size: 12 
-      });
-    }
-    
-    page.drawText(`Status Persetujuan: ${updatedPatient.StatusPersetujuan}`, { 
-      x: 50, y: height - 160, size: 12 
-    });
-    page.drawText(`Tanggal Persetujuan: ${new Date().toLocaleString('id-ID')}`, { 
-      x: 50, y: height - 180, size: 12 
-    });
-
-    const pdfBytes = await pdfDoc.saveAsBase64();
-    console.log('PDF generated successfully');
+    // --- SEMUA KODE GENERATE PDF DI BAWAH INI TELAH DIHAPUS ---
 
     return {
       statusCode: 200,
@@ -245,7 +207,7 @@ exports.handler = async function (event, context) {
       body: JSON.stringify({
         success: true,
         message: 'Persetujuan berhasil disimpan',
-        pdf_data: pdfBytes,
+        // pdf_data: pdfBytes, <-- DIHAPUS
         patient: {
           NomorMR: updatedPatient.NomorMR,
           NamaPasien: updatedPatient.NamaPasien,

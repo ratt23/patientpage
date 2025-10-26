@@ -14,6 +14,12 @@ const PatientPage = () => {
   const [currentSection, setCurrentSection] = useState(0);
   const [canvasWidth, setCanvasWidth] = useState(500);
   const signatureContainerRef = useRef(null);
+
+  // --- PERUBAHAN STATE (1) ---
+  const [isReadOnly, setIsReadOnly] = useState(false);
+  const [savedSignature, setSavedSignature] = useState(null);
+  // --- AKHIR PERUBAHAN ---
+
   const [consentChecks, setConsentChecks] = useState({
     check1: false, check2: false, check3: false,
     check4: false, check5: false, check6: false,
@@ -35,15 +41,33 @@ const PatientPage = () => {
     return () => window.removeEventListener('resize', updateCanvasWidth);
   }, [signatureContainerRef]);
 
+  // --- PERUBAHAN FETCH DATA (2) ---
   useEffect(() => {
     const fetchPatientData = async () => {
       try {
         const response = await axios.get(`/.netlify/functions/get-patient-details?token=${token}`);
+        
+        // Cek apakah pasien sudah menyetujui
         if (response.data.StatusPersetujuan === 'Disetujui') {
-          alert('E-booklet ini sudah disetujui sebelumnya.');
-          navigate('/terima-kasih');
+          // JANGAN REDIRECT, TAPI SET MODE READ-ONLY
+          setPatient(response.data);
+          setIsReadOnly(true);
+          
+          // Tampilkan data persetujuan & ttd yang tersimpan
+          if (response.data.PersetujuanData) {
+            setConsentChecks(response.data.PersetujuanData);
+          }
+          if (response.data.SignatureData) {
+            setSavedSignature(response.data.SignatureData);
+          }
+          // Otomatis pindah ke bagian persetujuan
+          setCurrentSection(sections.length - 1);
+
+        } else {
+          // Pasien belum setuju, biarkan mode normal
+          setPatient(response.data);
+          setIsReadOnly(false);
         }
-        setPatient(response.data);
       } catch (error) {
         console.error('Error fetching patient:', error);
         alert('Data pasien tidak ditemukan');
@@ -51,6 +75,7 @@ const PatientPage = () => {
     };
     fetchPatientData();
   }, [token, navigate]);
+  // --- AKHIR PERUBAHAN ---
 
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
@@ -59,6 +84,7 @@ const PatientPage = () => {
 
   const allChecked = Object.values(consentChecks).every(Boolean);
 
+  // --- PERUBAHAN SUBMIT DATA (3) ---
   const handleSubmit = async () => {
     if (!allChecked) {
       alert('Harap setujui semua poin pernyataan sebelum mengirim.');
@@ -71,19 +97,23 @@ const PatientPage = () => {
 
     setIsSubmitting(true);
     try {
-      const signatureData = signaturePad.toDataURL();
+      const signatureData = signaturePad.toDataURL(); // base64 ttd
+      
       await axios.post('/.netlify/functions/submit-approval', {
         NomorMR: patient.NomorMR, 
-        signature_data: signatureData
+        signature_data: signatureData, // ttd
+        persetujuanData: consentChecks // <-- KIRIM DATA CHECKBOX INI
       });
+      
       navigate('/terima-kasih');
     } catch (error) {
       console.error('Error submitting approval:', error);
-      alert('Gagal mengirim persetujuan');
+      alert('Gagal mengirim persetujuan: ' + (error.response?.data?.error || error.message));
     } finally {
       setIsSubmitting(false);
     }
   };
+  // --- AKHIR PERUBAHAN ---
 
   const clearSignature = () => { signaturePad.clear(); };
   const nextSection = () => { if (currentSection < sections.length - 1) { setCurrentSection(currentSection + 1); window.scrollTo(0, 0); } };
@@ -114,6 +144,7 @@ const PatientPage = () => {
           <span className={currentSection >= 1 ? 'active' : ''}>Mental</span>
           <span className={currentSection >= 2 ? 'active' : ''}>Fisik</span>
           <span className={currentSection >= 3 ? 'active' : ''}>Infeksi</span>
+          {/* --- INI ADALAH PERBAIKAN (1) --- */}
           <span className={currentSection >= 4 ? 'active' : ''}>Nyeri</span>
           <span className={currentSection >= 5 ? 'active' : ''}>Persetujuan</span>
         </div>
@@ -297,6 +328,7 @@ const PatientPage = () => {
                 <li>Nyeri visceral: berasal dari organ dalam</li>
               </ul>
             </div>
+            {/* --- INI ADALAH PERBAIKAN (2) --- */}
             <div className="risk-category">
               <h3>Pengobatan Nyeri Tanpa Obat</h3>
               <ul>
@@ -351,66 +383,94 @@ const PatientPage = () => {
                 
                 <p>Saya yang bertanda tangan di bawah ini, <strong>{patient.NamaPasien}</strong> (Nomor MR: <strong>{patient.NomorMR}</strong>), setelah membaca dan memahami seluruh informasi dalam booklet ini, dengan ini menyatakan:</p>
                 
+                {/* --- PERUBAHAN CHECKBOX (4) --- */}
                 <div className="consent-points">
                   <label className="consent-item-checkbox">
-                    <input type="checkbox" name="check1" checked={consentChecks.check1} onChange={handleCheckboxChange} />
+                    <input type="checkbox" name="check1" checked={consentChecks.check1} onChange={handleCheckboxChange} disabled={isReadOnly} />
                     <span className="custom-checkbox"></span>
                     <span className="consent-text">Telah memahami penjelasan mengenai indikasi dan manfaat tindakan operasi</span>
                   </label>
                   <label className="consent-item-checkbox">
-                    <input type="checkbox" name="check2" checked={consentChecks.check2} onChange={handleCheckboxChange} />
+                    <input type="checkbox" name="check2" checked={consentChecks.check2} onChange={handleCheckboxChange} disabled={isReadOnly} />
                     <span className="custom-checkbox"></span>
                     <span className="consent-text">Menyetujui pelaksanaan tindakan operasi sesuai jadwal</span>
                   </label>
                   <label className="consent-item-checkbox">
-                    <input type="checkbox" name="check3" checked={consentChecks.check3} onChange={handleCheckboxChange} />
+                    <input type="checkbox" name="check3" checked={consentChecks.check3} onChange={handleCheckboxChange} disabled={isReadOnly} />
                     <span className="custom-checkbox"></span>
                     <span className="consent-text">Memahami risiko dan komplikasi yang mungkin terjadi</span>
                   </label>
                   <label className="consent-item-checkbox">
-                    <input type="checkbox" name="check4" checked={consentChecks.check4} onChange={handleCheckboxChange} />
+                    <input type="checkbox" name="check4" checked={consentChecks.check4} onChange={handleCheckboxChange} disabled={isReadOnly} />
                     <span className="custom-checkbox"></span>
                     <span className="consent-text">Bersedia mengikuti seluruh prosedur persiapan operasi</span>
                   </label>
                   <label className="consent-item-checkbox">
-                    <input type="checkbox" name="check5" checked={consentChecks.check5} onChange={handleCheckboxChange} />
+                    <input type="checkbox" name="check5" checked={consentChecks.check5} onChange={handleCheckboxChange} disabled={isReadOnly} />
                     <span className="custom-checkbox"></span>
                     <span className="consent-text">Memahami tata laksana pengelolaan nyeri pasca operasi</span>
                   </label>
                   <label className="consent-item-checkbox">
-                    <input type="checkbox" name="check6" checked={consentChecks.check6} onChange={handleCheckboxChange} />
+                    <input type="checkbox" name="check6" checked={consentChecks.check6} onChange={handleCheckboxChange} disabled={isReadOnly} />
                     <span className="custom-checkbox"></span>
                     <span className="consent-text">Bersedia melakukan pencegahan infeksi sesuai panduan</span>
                   </label>
                 </div>
               </div>
 
+              {/* --- PERUBAHAN AREA TANDA TANGAN (5) --- */}
               <div className="signature-area">
                 <h3>Tanda Tangan Pasien/Penanggung Jawab</h3>
-                <div className="signature-pad-container" ref={signatureContainerRef}>
-                  <SignatureCanvas
-                    ref={(ref) => setSignaturePad(ref)}
-                    canvasProps={{ width: canvasWidth, height: 200, className: 'signature-canvas' }}
-                  />
-                </div>
-                <div className="signature-actions"><button onClick={clearSignature} className="btn-clear">🗑️ Hapus Tanda Tangan</button></div>
+                
+                {isReadOnly && savedSignature ? (
+                  <div className="saved-signature-container" style={{ textAlign: 'center', background: '#fff', border: '1px solid #e0e0e0', borderRadius: '8px', padding: '10px' }}>
+                    <img src={savedSignature} alt="Tanda Tangan Tersimpan" style={{ maxWidth: '100%', height: 'auto', maxHeight: '150px' }} />
+                    <p style={{ fontStyle: 'italic', color: '#555', fontSize: '14px', marginTop: '10px' }}>
+                      Telah ditandatangani pada: {new Date(patient.TimestampPersetujuan).toLocaleString('id-ID')}
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="signature-pad-container" ref={signatureContainerRef}>
+                      <SignatureCanvas
+                        ref={(ref) => setSignaturePad(ref)}
+                        canvasProps={{ width: canvasWidth, height: 200, className: 'signature-canvas' }}
+                      />
+                    </div>
+                    <div className="signature-actions"><button onClick={clearSignature} className="btn-clear">🗑️ Hapus Tanda Tangan</button></div>
+                  </>
+                )}
+
                 <div className="signature-details">
                   <div className="detail-item"><label>Nama Terang:</label><span>{patient.NamaPasien}</span></div>
-                  <div className="detail-item"><label>Tanggal:</label><span>{new Date().toLocaleDateString('id-ID')}</span></div>
-                  <div className="detail-item"><label>Waktu:</label><span>{new Date().toLocaleTimeString('id-ID')}</span></div>
+                  <div className="detail-item"><label>Tanggal:</label><span>{isReadOnly ? new Date(patient.TimestampPersetujuan).toLocaleDateString('id-ID') : new Date().toLocaleDateString('id-ID')}</span></div>
+                  <div className="detail-item"><label>Waktu:</label><span>{isReadOnly ? new Date(patient.TimestampPersetujuan).toLocaleTimeString('id-ID') : new Date().toLocaleTimeString('id-ID')}</span></div>
                 </div>
               </div>
+              {/* --- AKHIR PERUBAHAN --- */}
 
+
+              {/* --- PERUBAHAN TOMBOL SUBMIT (6) --- */}
               <div className="final-submission">
-                <p className="confirmation-text">Persiapan yang baik selama periode operasi akan membantu menurunkan komplikasi operasi dan mempercepat pemulihan setelah operasi. Dengan mengirim persetujuan ini, saya menyatakan telah memahami semua informasi yang diberikan.</p>
-                <button 
-                  onClick={handleSubmit} 
-                  disabled={isSubmitting || !allChecked}
-                  className="btn-submit-consent"
-                >
-                  {isSubmitting ? '🔄 Mengirim Persetujuan...' : '✅ SETUJU & KIRIM PERSETUJUAN'}
-                </button>
+                <p className="confirmation-text">
+                  {isReadOnly 
+                    ? "Dokumen ini telah disetujui dan diarsipkan. Anda dapat melihat kembali informasi ini kapan saja."
+                    : "Persiapan yang baik selama periode operasi akan membantu menurunkan komplikasi operasi dan mempercepat pemulihan setelah operasi. Dengan mengirim persetujuan ini, saya menyatakan telah memahami semua informasi yang diberikan."
+                  }
+                </p>
+                
+                {!isReadOnly && (
+                  <button 
+                    onClick={handleSubmit} 
+                    disabled={isSubmitting || !allChecked}
+                    className="btn-submit-consent"
+                  >
+                    {isSubmitting ? '🔄 Mengirim Persetujuan...' : '✅ SETUJU & KIRIM PERSETUJUAN'}
+                  </button>
+                )}
               </div>
+              {/* --- AKHIR PERUBAHAN --- */}
+
             </div>
 
             <div className="section-navigation"><button onClick={prevSection} className="btn-prev">← Kembali ke Pengelolaan Nyeri</button></div>
