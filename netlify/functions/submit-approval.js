@@ -9,10 +9,28 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
+// Helper function untuk memastikan data JSON valid
+function ensureValidJSON(data) {
+  if (typeof data === 'string') {
+    try {
+      return JSON.parse(data);
+    } catch (e) {
+      // Jika tidak bisa di-parse, kembalikan sebagai object dengan properti value
+      return { rawData: data };
+    }
+  }
+  
+  if (typeof data === 'object' && data !== null) {
+    return data;
+  }
+  
+  // Untuk tipe data lain, konversi ke string dan simpan dalam object
+  return { value: String(data) };
+}
+
 exports.handler = async function (event, context) {
   console.log('=== submit-approval called ===');
   console.log('Method:', event.httpMethod);
-  console.log('Path:', event.path);
   
   // Handle preflight OPTIONS request
   if (event.httpMethod === 'OPTIONS') {
@@ -41,7 +59,7 @@ exports.handler = async function (event, context) {
   let body;
   try {
     body = JSON.parse(event.body);
-    console.log('Received body:', JSON.stringify(body, null, 2));
+    console.log('Received body keys:', Object.keys(body));
   } catch (e) {
     console.error('JSON parse error:', e.message);
     return {
@@ -63,18 +81,19 @@ exports.handler = async function (event, context) {
     persetujuanData, // Format baru  
     NomorMR,         // Format lama
     signature_data,  // Format lama
-    // Tambahan fields yang mungkin dikirim
     patientData,
-    formData,
-    consentData
+    formData
   } = body;
 
   // Tentukan identifier yang akan digunakan
   const identifier = token || NomorMR;
-  const approvalData = persetujuanData || signature_data || patientData || formData || consentData || body;
+  
+  // Pastikan data persetujuan valid untuk JSON
+  const rawApprovalData = persetujuanData || patientData || formData || body;
+  const safeApprovalData = ensureValidJSON(rawApprovalData);
 
   console.log('Using identifier:', identifier);
-  console.log('Using approval data:', approvalData);
+  console.log('Safe approval data type:', typeof safeApprovalData);
 
   if (!identifier) {
     return {
@@ -85,8 +104,7 @@ exports.handler = async function (event, context) {
       },
       body: JSON.stringify({ 
         error: 'Token/NomorMR wajib diisi',
-        receivedFields: Object.keys(body),
-        suggestion: 'Pastikan mengirim "token" atau "NomorMR" dalam request body'
+        receivedFields: Object.keys(body)
       })
     };
   }
@@ -148,6 +166,21 @@ exports.handler = async function (event, context) {
     }
 
     // UPDATE DATA - gunakan identifier yang berhasil
+    // HANYA simpan signature_data jika itu string biasa, bukan base64 image
+    let safeSignatureData = null;
+    if (signature_data && typeof signature_data === 'string') {
+      // Jika signature_data adalah base64 image, jangan simpan di JSON
+      // Simpan hanya jika itu bukan data gambar yang besar
+      if (!signature_data.startsWith('data:image/') && signature_data.length < 1000) {
+        safeSignatureData = signature_data;
+      } else {
+        console.log('Skipping large base64 image signature data');
+        // Untuk base64 image, kita bisa simpan di kolom terpisah atau skip
+        // Atau simpan sebagai string truncated
+        safeSignatureData = '[base64_image_signature]';
+      }
+    }
+
     const updateQuery = `
       UPDATE patients 
       SET 
@@ -158,16 +191,17 @@ exports.handler = async function (event, context) {
       WHERE "NomorMR" = $3
       RETURNING *`;
 
+    console.log('Executing update with safe JSON data');
     const result = await client.query(updateQuery, [
-      approvalData, 
-      signature_data || null, 
+      safeApprovalData, 
+      safeSignatureData, 
       patient.NomorMR
     ]);
 
     const updatedPatient = result.rows[0];
     console.log('Approval updated for:', updatedPatient.NamaPasien);
     
-    // GENERATE PDF (opsional - bisa dihapus jika tidak diperlukan)
+    // GENERATE PDF
     console.log('Generating PDF...');
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([600, 400]);
@@ -196,22 +230,6 @@ exports.handler = async function (event, context) {
     page.drawText(`Tanggal Persetujuan: ${new Date().toLocaleString('id-ID')}`, { 
       x: 50, y: height - 180, size: 12 
     });
-    
-    // Tambahkan data persetujuan ke PDF jika ada
-    if (approvalData && typeof approvalData === 'object') {
-      page.drawText('Data Persetujuan:', { 
-        x: 50, y: height - 210, size: 12 
-      });
-      
-      let yPos = height - 230;
-      Object.entries(approvalData).forEach(([key, value]) => {
-        if (yPos > 100) { // Prevent overflow
-          const text = `${key}: ${JSON.stringify(value).substring(0, 50)}...`;
-          page.drawText(text, { x: 50, y: yPos, size: 10 });
-          yPos -= 15;
-        }
-      });
-    }
 
     const pdfBytes = await pdfDoc.saveAsBase64();
     console.log('PDF generated successfully');
@@ -227,7 +245,7 @@ exports.handler = async function (event, context) {
       body: JSON.stringify({
         success: true,
         message: 'Persetujuan berhasil disimpan',
-        pdf_data: pdfBytes, // Opsional - bisa dihapus
+        pdf_data: pdfBytes,
         patient: {
           NomorMR: updatedPatient.NomorMR,
           NamaPasien: updatedPatient.NamaPasien,
@@ -247,7 +265,7 @@ exports.handler = async function (event, context) {
       body: JSON.stringify({ 
         error: 'Gagal menyimpan persetujuan',
         details: error.message,
-        stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        hint: 'Pastikan data yang dikirim berupa JSON valid'
       }),
     };
   } finally {
