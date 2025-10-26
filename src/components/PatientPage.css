@@ -20,28 +20,66 @@
   align-items: center;
   gap: 30px;
 }
-.logo-placeholder img {
-  height: 60px;
-  width: auto;
-  background: #f0f0f0;
-  border-radius: 4px;
-}
+
 .header-text { flex: 1; }
 .hospital-info {
   margin-top: 10px; 
   padding-top: 10px; 
   border-top: 1px solid rgba(255, 255, 255, 0.3);
 }
-.hospital-info h2 {
+/* --- GANTI/TAMBAHKAN CSS HEADER INI --- */
+
+/* Header */
+.ebooklet-header {
+  background: #2b3b98;
+  color: white;
+  padding: 20px 30px;
+  display: flex;
+  align-items: center; /* Vertikal center */
+  gap: 20px;          /* Jarak antara logo dan teks */
+}
+
+/* Logo */
+.hospital-logo {
+  height: 50px; /* Atur tinggi logo Anda */
+  width: auto;
+  flex-shrink: 0; /* Mencegah logo mengecil */
+}
+
+/* Blok Teks */
+.header-text-block {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.document-title h1 {
   margin: 0 0 5px 0;
-  font-size: 18px;
+  font-size: 24px;
   font-weight: bold;
 }
-.hospital-info p {
-  margin: 2px 0; 
-  opacity: 0.9;
+.document-title p {
+  margin: 0;
   font-size: 14px; 
+  opacity: 0.8;
 }
+
+/* Info Petugas */
+.hospital-info {
+  margin-top: 5px; 
+  padding-top: 5px; 
+  border-top: 1px solid rgba(255, 255, 255, 0.3); /* Garis pemisah tipis */
+}
+
+.petugas-info {
+  color: #ffcf0b; /* Warna kuning */
+  font-weight: bold;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* --- (CSS Anda yang lain lanjut di sini) --- */
+
 .document-title h1 {
   margin: 0 0 5px 0;
   font-size: 24px;
