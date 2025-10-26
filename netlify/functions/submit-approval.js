@@ -10,14 +10,12 @@ function ensureValidJSON(data) {
     try { 
       return JSON.parse(data); 
     } catch (e) { 
-      console.warn('ensureValidJSON: Gagal parse string, menyimpan sebagai raw.', data);
       return { rawData: data }; 
     }
   }
   if (typeof data === 'object' && data !== null) { 
     return data; 
   }
-  console.warn('ensureValidJSON: Tipe data tidak dikenal, menyimpan sebagai string.', data);
   return { value: String(data) };
 }
 
@@ -31,12 +29,10 @@ exports.handler = async function (event, context) {
   };
 
   if (event.httpMethod === 'OPTIONS') {
-    console.log('Menangani request OPTIONS (preflight)');
     return { statusCode: 200, headers, body: '' };
   }
 
   if (event.httpMethod !== 'POST') {
-    console.warn('Metode tidak diizinkan:', event.httpMethod);
     return {
       statusCode: 405,
       headers,
@@ -68,9 +64,6 @@ exports.handler = async function (event, context) {
   } = body;
 
   const identifier = token || NomorMR;
-  
-  console.log(`Data diterima: identifier=${identifier}, namaPetugas=${namaPetugas}, catatanDokter=${catatanDokter}`);
-
   const safeApprovalData = ensureValidJSON(persetujuanData || {});
   const safePetugasParafData = ensureValidJSON(petugasParafData || {});
   
@@ -89,57 +82,45 @@ exports.handler = async function (event, context) {
     client = await pool.connect();
     console.log('Berhasil terhubung ke database.');
     
-    // Gunakan huruf kecil untuk nama kolom di sini juga
+    // ==========================================================
+    // PERBAIKAN 1: Query pencarian pasien
+    // Menggunakan "TokenAkses" dan "NomorMR" sesuai skema
+    // ==========================================================
     const findQuery = token 
-      ? `SELECT * FROM patients WHERE token = $1`
-      : `SELECT * FROM patients WHERE nomormr = $1`; 
+      ? `SELECT * FROM patients WHERE "TokenAkses" = $1`
+      : `SELECT * FROM patients WHERE "NomorMR" = $1`;
     
     console.log('Mencari pasien dengan identifier:', identifier);
     const findResult = await client.query(findQuery, [identifier]);
     
     if (findResult.rows.length === 0) {
       console.warn('Pasien tidak ditemukan dengan identifier:', identifier);
-      // Cek apakah identifier adalah NomorMR, jika ya, coba cari dengan tanda kutip
-      // Ini hanya untuk jaga-jaga jika 'findQuery' sebelumnya gagal karena case-sensitivity
-      if (NomorMR && !token) {
-          const fallbackQuery = `SELECT * FROM patients WHERE "NomorMR" = $1`;
-          console.log('Mencoba fallback query dengan "NomorMR"');
-          const fallbackResult = await client.query(fallbackQuery, [NomorMR]);
-          if (fallbackResult.rows.length > 0) {
-              console.log('Pasien ditemukan dengan fallback query.');
-              // Lanjut ke proses update dengan data pasien dari fallback
-              // ... (Duplikasi logika update di bawah) ...
-          } else {
-             console.log('Pasien tetap tidak ditemukan dengan fallback query.');
-             return { statusCode: 404, headers, body: JSON.stringify({ error: 'Patient not found' }) };
-          }
-      } else {
-         return { statusCode: 404, headers, body: JSON.stringify({ error: 'Patient not found' }) };
-      }
-      // Jika Anda yakin nomormr selalu huruf kecil, baris 121-134 bisa dihapus.
-      // Saya biarkan untuk robust-ness, tapi jika ingin simpel, cukup return 404 di baris 120.
-      // Versi simpel (hapus baris 121-134, biarkan baris 120):
-      // return { statusCode: 404, headers, body: JSON.stringify({ error: 'Patient not found' }) };
+      return {
+        statusCode: 404,
+        headers,
+        body: JSON.stringify({ error: 'Patient not found' })
+      };
     }
 
     const patient = findResult.rows[0];
-    console.log('Pasien ditemukan:', patient.nomormr, patient.namapasien); // asumsi nama kolom juga lowercase
+    console.log('Pasien ditemukan:', patient.NomorMR, patient.NamaPasien);
     let safeSignatureData = signature_data || null;
 
     // ==========================================================
-    // INI BAGIAN YANG DIPERBAIKI (Baris 144-156)
+    // PERBAIKAN 2: Query update
+    // Menggunakan nama kolom MixedCase dengan tanda kutip (")
     // ==========================================================
     const updateQuery = `
       UPDATE patients 
       SET 
-        statuspersetujuan = 'Disetujui', 
-        timestamppersetujuan = CURRENT_TIMESTAMP,
-        persetujuandata = $1,
-        signaturedata = $2,
-        namapetugas = $3,
-        petugasparafdata = $4,
-        catatandokter = $5
-      WHERE nomormr = $6
+        "StatusPersetujuan" = 'Disetujui', 
+        "TimestampPersetujuan" = CURRENT_TIMESTAMP,
+        "PersetujuanData" = $1,
+        "SignatureData" = $2,
+        "NamaPetugas" = $3,
+        "PetugasParafData" = $4,
+        "CatatanDokter" = $5
+      WHERE "NomorMR" = $6
       RETURNING *`;
 
     const queryParams = [
@@ -148,20 +129,17 @@ exports.handler = async function (event, context) {
       namaPetugas || null,   // $3
       safePetugasParafData,  // $4
       catatanDokter || null, // $5
-      patient.nomormr        // $6 (pastikan ini juga huruf kecil)
+      patient.NomorMR        // $6 (Gunakan .NomorMR sesuai data 'patient' yg didapat)
     ];
     // ==========================================================
-    // AKHIR DARI BAGIAN YANG DIPERBAIKI
-    // ==========================================================
-
-    console.log('Menjalankan query UPDATE untuk NomorMR:', patient.nomormr);
     
+    console.log('Menjalankan query UPDATE untuk NomorMR:', patient.NomorMR);
     const result = await client.query(updateQuery, queryParams);
-
     const updatedPatient = result.rows[0];
-    console.log('Persetujuan berhasil diperbarui untuk:', updatedPatient.namapasien);
-    console.log('Nama Petugas tersimpan:', updatedPatient.namapetugas);
-    console.log('Catatan Dokter tersimpan:', updatedPatient.catatandokter);
+    
+    console.log('Persetujuan berhasil diperbarui untuk:', updatedPatient.NamaPasien);
+    console.log('Nama Petugas tersimpan:', updatedPatient.NamaPetugas);
+    console.log('Catatan Dokter tersimpan:', updatedPatient.CatatanDokter);
     
     return {
       statusCode: 200,
@@ -170,10 +148,10 @@ exports.handler = async function (event, context) {
         success: true,
         message: 'Persetujuan berhasil disimpan',
         patient: {
-          NomorMR: updatedPatient.nomormr,
-          NamaPasien: updatedPatient.namapasien,
-          StatusPersetujuan: updatedPatient.statuspersetujuan,
-          CatatanDokter: updatedPatient.catatandokter
+          NomorMR: updatedPatient.NomorMR,
+          NamaPasien: updatedPatient.NamaPasien,
+          StatusPersetujuan: updatedPatient.StatusPersetujuan,
+          CatatanDokter: updatedPatient.CatatanDokter
         }
       }),
     };
