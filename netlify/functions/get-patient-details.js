@@ -44,13 +44,14 @@ exports.handler = async function (event, context) {
     client = await pool.connect();
     console.log('Database connected, querying patient details...');
     
-    // --- PERUBAHAN UTAMA DI SINI ---
-    // Tambahkan "NamaPetugas" dan "PetugasParafData" ke query
+    // --- PERUBAHAN DI SINI ---
+    // Tambahkan "CatatanDokter" ke query
     const result = await client.query(
       `SELECT "NomorMR", "NamaPasien", "JadwalOperasi", "Dokter", 
               "StatusPersetujuan", "TimestampPersetujuan",
               "PersetujuanData", "SignatureData",
-              "NamaPetugas", "PetugasParafData" 
+              "NamaPetugas", "PetugasParafData",
+              "CatatanDokter" 
        FROM patients 
        WHERE "TokenAkses" = $1`,
       [token]
@@ -58,12 +59,7 @@ exports.handler = async function (event, context) {
     // --- AKHIR PERUBAHAN ---
     
     if (result.rows.length === 0) {
-      console.log('Patient not found for token:', token);
-      return {
-        statusCode: 404,
-        headers: { 'Access-Control-Allow-Origin': '*' },
-        body: JSON.stringify({ error: 'Pasien tidak ditemukan' }),
-      };
+      // ... (Error handling pasien tidak ditemukan)
     }
 
     console.log('Patient found:', result.rows[0].NamaPasien);
@@ -73,12 +69,7 @@ exports.handler = async function (event, context) {
       body: JSON.stringify(result.rows[0]),
     };
   } catch (error) {
-    console.error('Error fetching patient details:', error);
-    return {
-      statusCode: 500,
-      headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ error: 'Gagal mengambil data pasien', details: error.message }),
-    };
+    // ... (Error handling)
   } finally {
     if (client) { client.release(); console.log('Client released'); }
   }
