@@ -154,7 +154,13 @@ const PatientPage = () => {
   return (
     <div className="patient-page">
       <header className="ebooklet-header">
-        <img src="/logoputih.png" alt="Logo Rumah Sakit" className="hospital-logo" />
+        {/* PERUBAHAN: Logo diperbesar dengan menambahkan style inline */}
+        <img 
+          src="/logoputih.png" 
+          alt="Logo Rumah Sakit" 
+          className="hospital-logo" 
+          style={{ width: '200px', height: 'auto' }} 
+        />
         <div className="header-text-block">
           <div className="document-title">
             <h1>BOOKLET PERSIAPAN OPERASI</h1>
