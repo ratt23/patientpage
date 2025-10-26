@@ -129,7 +129,6 @@ const PatientPage = () => {
           setSavedSignature(response.data.SignatureData || null);
           
           // JANGAN auto-navigate ke halaman terakhir
-          // setCurrentSection(sections.length - 1); <-- DIHAPUS
         } else {
           // --- MODE MENGISI BARU ---
           setIsReadOnly(false);
@@ -170,6 +169,12 @@ const PatientPage = () => {
       alert('Harap setujui semua poin pernyataan sebelum mengirim.');
       return;
     }
+    // Cek apakah SEMUA 5 paraf petugas sudah dicentang
+    const allPetugasChecked = Object.values(petugasCheckboxes).every(Boolean);
+    if (!allPetugasChecked) {
+      alert('Harap petugas memverifikasi (mencentang) semua halaman sebelum submit.');
+      return;
+    }
     if (signaturePad.isEmpty()) {
       alert('Harap berikan tanda tangan terlebih dahulu');
       return;
@@ -177,7 +182,7 @@ const PatientPage = () => {
 
     setIsSubmitting(true);
     try {
-      const signatureData = signaturePad.toDataURL();
+      const signatureData = signaturePad.toDataURL(); // Ini sudah base64 penuh
       
       await axios.post('/.netlify/functions/submit-approval', {
         NomorMR: patient.NomorMR, 
@@ -216,19 +221,27 @@ const PatientPage = () => {
   // 3. Tampilkan halaman e-booklet
   return (
     <div className="patient-page">
+      {/* --- HEADER BARU --- */}
       <header className="ebooklet-header">
-        <div className="logo-placeholder"><img src="https://via.placeholder.com/200x60?text=LOGO+ANDA" alt="Logo Rumah Sakit" /></div>
         <div className="header-text">
           <div className="document-title">
             <h1>BOOKLET PERSIAPAN OPERASI</h1><p>SURGICAL PREPARATION GUIDE</p>
           </div>
+          
           <div className="hospital-info">
-            <h2>SILOAM HOSPITALS AMBON</h2><p>Telp: (xxx) xxxx xxxx</p>
+            {/* Logo baru Anda */}
+            <img src="/asset/logoputih.png" alt="Logo Rumah Sakit" className="hospital-logo" />
+            
             {/* Tampilkan nama petugas jika sudah di-set */}
-            {namaPetugas && <p style={{ color: '#ffcf0b', fontWeight: 'bold' }}>Petugas: {namaPetugas}</p>}
+            {namaPetugas && (
+              <p className="petugas-info">
+                Petugas: {namaPetugas}
+              </p>
+            )}
           </div>
         </div>
       </header>
+      {/* --- AKHIR HEADER BARU --- */}
 
       <nav className="section-nav">
         <div className="progress-bar"><div className="progress-fill" style={{ width: `${((currentSection + 1) / sections.length) * 100}%` }}></div></div>
@@ -370,7 +383,6 @@ const PatientPage = () => {
                     <span className="custom-checkbox"></span>
                     <span className="consent-text">Telah memahami penjelasan...</span>
                   </label>
-                  {/* ... (Checkbox 2 s/d 6 lainnya) ... */}
                    <label className="consent-item-checkbox">
                     <input type="checkbox" name="check2" checked={consentChecks.check2} onChange={handleCheckboxChange} disabled={isReadOnly} />
                     <span className="custom-checkbox"></span>
@@ -455,7 +467,8 @@ const PatientPage = () => {
       </div>
 
       <footer className="ebooklet-footer">
-        {/* ... (Konten footer) ... */}
+        <p><strong>SILOAM HOSPITALS AMBON</strong></p>
+        <p className="footer-contact">Ambulans 24 Jam: 1-500-911 | Informasi: 1-500-181</p>
       </footer>
     </div>
   );
