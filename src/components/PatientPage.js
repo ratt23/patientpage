@@ -154,7 +154,7 @@ const PatientPage = () => {
   return (
     <div className="patient-page">
       <header className="ebooklet-header">
-        <img src="/asset/logoputih.png" alt="Logo Rumah Sakit" className="hospital-logo" />
+        <img src="/logoputih.png" alt="Logo Rumah Sakit" className="hospital-logo" />
         <div className="header-text-block">
           <div className="document-title">
             <h1>BOOKLET PERSIAPAN OPERASI</h1>
